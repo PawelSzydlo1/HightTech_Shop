@@ -12,4 +12,11 @@ public class UserController {
     public User getUser(@PathVariable Long id){
         return new User("Pawel","Szydlo","psz0587@gmail.com", id);
     }
+
+
+
+
+
+
+
 }
