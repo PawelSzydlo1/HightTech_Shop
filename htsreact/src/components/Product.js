@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { ProductConsumer } from "../context";
-import PropTypes from "prop-types";
 
+import PropTypes from "prop-types";
+import Details from './Details';
 export default class Product extends Component {
   render() {
-    const { id, title, img, price, inCart } = this.props.product;
+
+    const { id, title, imgName, price, inCart } = this.props.product;
     return (
       <ProductWrapper className="col-12 mx-auto col-md-4 col-lg-3 my-3">
         <div className="card">
@@ -14,12 +15,14 @@ export default class Product extends Component {
             className="img-container p-5"
             onClick={() => console.log("you clicked me on the image container")}
           >
-            <Link to="/details">
-              <img src={img} alt="product" className="card-img-top" />
+            <div>
+            <Link to="/details" key={id} >
+              <img src={imgName} alt="product" className="card-img-top" />
             </Link>
+            </div>
             <button
               className="cart-btn"
-              disable={inCart ? true : false}
+              disabled={inCart}
               onClick={() => {
                 console.log("added to the cart");
               }}
@@ -49,11 +52,10 @@ export default class Product extends Component {
     );
   }
 }
-
 Product.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.number,
-    img: PropTypes.string,
+    imgName: PropTypes.string,
     title: PropTypes.string,
     price: PropTypes.number,
     inCart: PropTypes.bool,

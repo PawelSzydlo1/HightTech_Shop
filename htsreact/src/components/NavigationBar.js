@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import logo from "../logo.svg";
-import serviceImg from "../serviceImage.svg";
+
 import styled from "styled-components";
 import {ButtonContainer} from "./Button";
 import {Link} from "react-router-dom";
@@ -11,47 +11,59 @@ export default class NavigationBar extends Component {
         return (
             <NavWrapper>
                 <div className="navbar navbar-expand-lg">
-                    <a className="navbar-brand" href="/">
+                    <Link to="/">
+                    <a className="navbar-brand">
                         <Img src={logo}/>
 
                     </a>
-                    <a className="navbar-brand" href="/">
+                    </Link>
+                    <Link to="/">
+                    <a className="navbar-brand">
                         HighTech Shop
                     </a>
-                    <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    </Link>
+                    <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggle-icon"/>
                     </div>
                     <div className="collapse navbar-collapse " id="navbarNav">
                         <div className="navbar-nav ml-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="/service">
+                                <Link to="/service">
+                                <a className="nav-link">
                                     <ButtonContainer>
                                         <span className="mr-2">
-                                        <i class="fas fa-tools"/>
+                                        <i className="fas fa-tools"/>
                                         </span>
                                         Service
                                     </ButtonContainer>
                                 </a>
+                                </Link>
                             </li>
 
                             <li className="nav-item">
-                                <a className="nav-link" href="/cart">
+                                <Link to="/cart">
+                                <a className="nav-link">
                                     <ButtonContainer>
-                        <span className="mr-2">
-                        <i className="fa fa-cart-plus"/>
-                        </span>
+                                        <span className="mr-2">
+                                        <i className="fa fa-cart-plus"/>
+                                        </span>
                                         my cart
                                     </ButtonContainer>
                                 </a>
+                            </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/">
+                                <Link to="/successfulLogin">
+                                <a className="nav-link">
                                     <ButtonContainer>
-                        <span className="ml-2 mr-2">
-                        <i className="fas fa-users-cog"/>
-                        </span>
+                                        <span className="ml-2 mr-2">
+                                            <i className="fas fa-users-cog"/>
+                                        </span>
+                                        Login
                                     </ButtonContainer>
                                 </a>
+                                </Link>
                             </li>
                         </div>
                     </div>

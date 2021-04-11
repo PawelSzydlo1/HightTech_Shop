@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Title from "./Title";
 import styled from 'styled-components';
+import MultiRange from "./MultiRange";
 
 export default class Filter extends Component {
   render() {
@@ -12,58 +13,56 @@ export default class Filter extends Component {
 
 
           </div>
-        <div class="form-check form-switch ">
+        <div className="form-check form-switch ">
           <input
-            class="form-check-input"
+              className="form-check-input"
             type="checkbox"
             id="flexSwitchCheckDefault"
           />
-          <label class="form-check-label " for="flexSwitchCheckDefault">
+          <label className="form-check-label " form="flexSwitchCheckDefault">
               Phone
           </label>
         </div>
 
 
-        <div class="form-check form-switch">
+        <div className="form-check form-switch">
           <input
-            class="form-check-input"
+              className="form-check-input"
             type="checkbox"
             id="flexSwitchCheckDefault"
           />
-          <label class="form-check-label" for="flexSwitchCheckDefault">
-            Dysk
+          <label className="form-check-label" form="flexSwitchCheckDefault">
+            Dysc
           </label>
         </div>
 
-        <div class="form-check form-switch">
+
+
+        <div className="form-check form-switch">
           <input
-            class="form-check-input"
+              className="form-check-input"
             type="checkbox"
             id="flexSwitchCheckDefault"
           />
-          <label class="form-check-label" for="flexSwitchCheckDefault">
+          <label className="form-check-label" form="flexSwitchCheckDefault">
             Laptop
           </label>
         </div>
 
-        <div class="form-check form-switch">
+        <div className="form-check form-switch">
           <input
-            class="form-check-input"
+              className="form-check-input"
             type="checkbox"
             id="flexSwitchCheckDefault"
           />
-          <label class="form-check-label" for="flexSwitchCheckDefault">
+          <label className="form-check-label" form="flexSwitchCheckDefault">
             Computer
           </label>
 
         </div>
         <div className="container-lg p-2 justify-content-center">
-          <h3 className="title pl-4">Price</h3>
-          <div className="d-flex justify-content-evenly ">
-              <input type="text" className="form-control " placeholder="0"/>
-              <input type="range" className="form-range px-2" min="0" max="2000" id="customRange2"/>
-              <input type="text" className="form-control " placeholder="2000"/>
-          </div>
+          <h3 className="title pl-4 pb-3">Price</h3>
+            <MultiRange/>
         </div>
 
       </FilterWrapper>
