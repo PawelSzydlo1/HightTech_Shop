@@ -35,77 +35,62 @@ public class Product implements Serializable {
         this.total = total;
     }
 
+
+
+
     public Product() {
     }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getImgName() {
         return imgName;
     }
-
     public void setImgName(String imgIcon) {
         this.imgName = imgIcon;
     }
-
     public double getPrice() {
         return price;
     }
-
     public void setPrice(double price) {
         this.price = price;
     }
-
     public String getCompany() {
         return company;
     }
-
     public void setCompany(String company) {
         this.company = company;
     }
-
     public String getInfo() {
         return info;
     }
-
     public void setInfo(String info) {
         this.info = info;
     }
-
     public boolean isInCart() {
         return inCart;
     }
-
     public void setInCart(boolean inCart) {
         this.inCart = inCart;
     }
-
     public int getCount() {
         return count;
     }
-
     public void setCount(int count) {
         this.count = count;
     }
-
     public int getTotal() {
         return total;
     }
-
     public void setTotal(int total) {
         this.total = total;
     }

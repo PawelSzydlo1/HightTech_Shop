@@ -4,12 +4,12 @@ import {Link} from "react-router-dom";
 import {ButtonContainer} from "./Button";
 
 export default class Details extends Component {
-    title = "telefon";
+    title = "Title";
     imgName = "img/product-1.png";
     price = 11;
     inCart = false;
     company = "samsung";
-    info = "opis";
+    info = "description";
 
     render() {
         return (

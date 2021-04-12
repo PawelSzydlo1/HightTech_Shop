@@ -13,7 +13,7 @@ export default class NavigationBar extends Component {
                 <div className="navbar navbar-expand-lg">
                     <Link to="/">
                     <a className="navbar-brand">
-                        <Img src={logo}/>
+                        <img src={logo}/>
 
                     </a>
                     </Link>
@@ -83,8 +83,11 @@ const NavWrapper = styled.div`
     text-transform: capitalize;
     padding: 0.4rem 1rem;
   }
+  a{
+  text-decoration: none;
+  }
+  img{
+    width: 3rem;
+  }
 `;
 
-const Img = styled.img`
-  width: 3rem;
-`;

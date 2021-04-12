@@ -26,6 +26,6 @@ function SuccessfulRegistration(){
 
         </>
     );
-};
+}
 
 export default SuccessfulRegistration

@@ -14,10 +14,11 @@ function Registration ({submitForm}) {
                         <div className="col-xs-12 col-sm-10 col-md-6 col-sm-offset-4 col-md-offset-6 m-lg-5">
                             <div className="panel panel-default ">
                                 <div className="panel-heading">
-                                    <h3 className="panel-title p-3">Please sign up for HighTechShop </h3>
-                                    <h5><small>I have an account</small>
+                                    <h3 className="panel-title py-3">Please sign up for HighTechShop </h3>
+                                    <h5 className="d-flex align-content-between justify-content-center">
+                                        <small className="py-1">I have an account</small>
                                         <Link to='/successfulLogin'>
-                                            <ButtonContainer>
+                                            <ButtonContainer className="login">
                                                 Login
                                             </ButtonContainer>
                                         </Link>
@@ -37,6 +38,7 @@ function Registration ({submitForm}) {
                                                         value={values.name}
                                                         onChange={handleChange}
                                                         required
+                                                        autoComplete="off"
                                                     />
 
                                                 </div>
@@ -52,6 +54,7 @@ function Registration ({submitForm}) {
                                                         value={values.surname}
                                                         onChange={handleChange}
                                                         required
+                                                        autoComplete="off"
                                                     />
 
                                                 </div>
@@ -67,7 +70,8 @@ function Registration ({submitForm}) {
                                                 placeholder="Email Address"
                                                 value={values.email}
                                                 onChange={handleChange}
-
+                                                required
+                                                autoComplete="off"
                                             />
                                             {errors.email && <p>{errors.email}</p>}
                                         </div>
@@ -103,12 +107,16 @@ function Registration ({submitForm}) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <ButtonContainer type="submit">
-                                            Register
-                                        </ButtonContainer>
+                                        <div className="row-cols-3 d-flex justify-content-center align-content-center">
+                                            <ButtonContainer type="submit" className="registration">
+                                                Register
+                                            </ButtonContainer>
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -118,6 +126,21 @@ function Registration ({submitForm}) {
 export default Registration;
 
 const RegistrationWrapper = styled.div`
+  input {
+    text-transform: capitalize;
+    font-size: larger;
+    background: transparent;
+    border-radius: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-color: var(--lightBlue)
+    
+  }
 
+  .login {
+    font-size: medium;
+  }
+  .registration {
+    font-size: large;
+  }
 
 `;
