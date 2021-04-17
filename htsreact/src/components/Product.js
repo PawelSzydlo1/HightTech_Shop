@@ -1,23 +1,19 @@
-import React, {Component} from "react";
+
 import styled from "styled-components";
-import {Link} from "react-router-dom";
 
-import PropTypes from "prop-types";
+export default function Product({product, detailsFunction}) {
 
-export default class Product extends Component {
-    render() {
+        const {id,  title, imgName, price, inCart}=product;
 
-        const {id, title, imgName, price, inCart} = this.props.product;
         return (
-            <ProductWrapper className="col-12 mx-auto col-md-4 col-lg-3 my-3">
+            <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
                 <div className="card">
                     <div
                         className="img-container p-5"
                         onClick={() => console.log("you clicked me on the image container")}>
-                        <div>
-                            <Link to="/details" key={id}>
-                                <img src={imgName} alt="product" className="card-img-top"/>
-                            </Link>
+
+                        <div onClick={() => detailsFunction(product)}>
+                                <img src={imgName} alt="product" className="card-img-top"  />
                         </div>
                         <button
                             className="cart-btn"
@@ -46,17 +42,8 @@ export default class Product extends Component {
                 </div>
             </ProductWrapper>
         );
-    }
+
 }
-Product.propTypes = {
-    product: PropTypes.shape({
-        id: PropTypes.number,
-        imgName: PropTypes.string,
-        title: PropTypes.string,
-        price: PropTypes.number,
-        inCart: PropTypes.bool,
-    }).isRequired,
-};
 
 const ProductWrapper = styled.div`
   .card {

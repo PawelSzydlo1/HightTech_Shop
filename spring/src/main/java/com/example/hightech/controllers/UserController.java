@@ -66,7 +66,11 @@ public class UserController {
 
     @GetMapping("/add_user")
     public void adaUser() {
-        User user = new User("Pawel","Szydlo","P@gmail.com","1111");
+        User user = new User("Pawel","Szydlo","P@gmail.com","111111");
+        String salt = BCrypt.gensalt();
+        String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
+        user.setPassword(hashedPassword);
+        user.setSalt(salt);
         userRepository.save(user);
     }
 

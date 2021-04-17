@@ -1,42 +1,57 @@
 package com.example.hightech.models;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import javax.swing.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
+import java.util.Set;
 
 
 @Entity
+@Table(name ="products")
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty
     private String title;
+    @NotEmpty
     private String imgName;
+    @NotEmpty
     private double price;
+    @NotEmpty
     private String company;
+    @NotEmpty
     private String info;
+    @NotEmpty
     private boolean inCart;
+    @NotEmpty
     private int count;
+    @NotEmpty
     private int total;
 
-    public Product(String title, String imgName, double price, String company, String info, boolean inCart, int count, int total) {
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "card_id")
+    private Cart carts;
+
+
+
+    public Product(@NotEmpty String title, @NotEmpty String imgName, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty boolean inCart, @NotEmpty int count, @NotEmpty int total, Cart carts) {
         this.title = title;
-        this.imgName = "img/" + imgName;
+        this.imgName = "./img/"+imgName;
         this.price = price;
         this.company = company;
         this.info = info;
         this.inCart = inCart;
         this.count = count;
         this.total = total;
+        this.carts = carts;
     }
-
-
-
 
     public Product() {
     }
@@ -93,5 +108,13 @@ public class Product implements Serializable {
     }
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Cart getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Cart carts) {
+        this.carts = carts;
     }
 }

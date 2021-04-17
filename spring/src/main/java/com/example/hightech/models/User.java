@@ -1,8 +1,11 @@
 package com.example.hightech.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name ="users")
@@ -21,21 +24,30 @@ public class User  implements Serializable {
     @Column(unique = true)
     private String email;
 
-
+    @NotEmpty
     private String password;
 
     @NotEmpty
     private String salt;
 
 
-    public User(String name, String surname, String email,String password) {
+    @JsonIgnore
+    @OneToOne(mappedBy = "client")
+    private Cart cart;
 
+    public User(@NotEmpty String name, @NotEmpty String surname, @NotEmpty String email,@NotEmpty String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
 
     }
+
+
+
+
+
+
     public User() {
 
     }
@@ -75,4 +87,10 @@ public class User  implements Serializable {
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+
+
+
+
+
 }

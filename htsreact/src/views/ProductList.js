@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import Product from "../components/Product";
 import Title from "../components/Title";
 import Filter from "../components/Filter";
-
+import Details from "../components/Details";
 import styled from "styled-components";
 
 
@@ -13,23 +13,38 @@ const api = axios.create({
     baseURL: `http://localhost:8080/productList/`
 })
 
-export default class ProductList extends Component {
-    state = {
-        carts: []
-    }
+export default function ProductList() {
+    const [status, setStatus] = useState(false);
 
-    constructor() {
-        super();
+    const [products, setProducts] = useState([]);
+    const [details, setDetails] = useState([]);
+
+
+    useEffect(() => {
         api.get('/').then(response => response.data)
-            .then((data) => {
-                this.setState({carts: data})
-            })
+            .then(data => setProducts(data))
+
+    }, []);
+
+    const handleClick = e => {
+        //e.preventDefault();
+
+        setStatus(true);
     }
 
+    function changeStatus() {
+        setStatus(false);
 
-    render() {
-        return (
-            <React.Fragment>
+    }
+
+    const detailsFunction = (detail) => {
+        handleClick();
+        setDetails(detail);
+    }
+
+    return (
+        <ProductListWrapper>
+            {(status === false) ? (
                 <div className="row ">
                     <div className="col-3 ">
 
@@ -37,25 +52,31 @@ export default class ProductList extends Component {
                             <Filter/>
                         </div>
                     </div>
-
-
                     <div className="col-9">
                         <div className="container">
                             <Title name="our" title="products"/>
+
                             <div className="row">
 
-                                    {this.state.carts.map(cart => (
-                                        <Product key={cart.id } product={cart}>
-                                        </Product>
-
-                                    ))
-                                    }
+                                {products.map(product => (
+                                    <Product product={product}
+                                             detailsFunction={detailsFunction}/>
+                                ))
+                                }
 
                             </div>
                         </div>
                     </div>
                 </div>
-            </React.Fragment>
-        );
-    }
-}
+
+            ) : (
+                <Details details={details} changeStatus={changeStatus}/>
+
+            )}
+        </ProductListWrapper>
+    );
+};
+
+const ProductListWrapper = styled.div`
+
+`
