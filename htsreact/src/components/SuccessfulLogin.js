@@ -1,15 +1,10 @@
 import React, { useState} from 'react';
-import axios from "axios";
+
 import {Link} from "react-router-dom";
 import Login from "../views/Login";
 import {ButtonContainer} from "./Button";
 
 function SuccessfulLogin() {
-
-
-    const api = axios.create({
-        baseURL: `http://localhost:8080`
-    })
 
 
     const [user, setUser] = useState({email: ""});

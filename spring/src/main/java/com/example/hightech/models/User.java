@@ -33,7 +33,7 @@ public class User  implements Serializable {
 
     @JsonIgnore
     @OneToOne(mappedBy = "client")
-    private Cart cart;
+    private Cart carts;
 
     public User(@NotEmpty String name, @NotEmpty String surname, @NotEmpty String email,@NotEmpty String password) {
         this.name = name;
@@ -42,8 +42,6 @@ public class User  implements Serializable {
         this.password = password;
 
     }
-
-
 
 
 
@@ -88,9 +86,11 @@ public class User  implements Serializable {
         this.salt = salt;
     }
 
+    public Cart getCarts() {
+        return carts;
+    }
 
-
-
-
-
+    public void setCarts(Cart carts) {
+        this.carts = carts;
+    }
 }

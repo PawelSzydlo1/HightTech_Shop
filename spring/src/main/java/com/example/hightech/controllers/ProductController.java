@@ -8,15 +8,15 @@ import com.example.hightech.repository.ProductRepository;
 import com.example.hightech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
     @Autowired
-    private  ProductRepository productRepository;
+    private final ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -32,19 +32,29 @@ public class ProductController {
         return productRepository.findAll();
     }
 
-    @GetMapping("/productListAdd")
-    public void addProductList() {
-        User user=new User("Pawel","Sz","pemail@gmail.com","123456");
-        String salt = BCrypt.gensalt();
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
-        user.setPassword(hashedPassword);
-        user.setSalt(salt);
-        userRepository.save(user);
 
-        Cart cart = new Cart(2.0,user);
-        cartRepository.save(cart);
+    @GetMapping("/productList/{id}")
+    public Product getCartById(@PathVariable("id") Long id){
+        Optional<Product> optionalCart = Optional.ofNullable(productRepository.findProductsByCart_Id(id));
+        return optionalCart.orElse(null);
 
-        Product product = new Product("Google Pixel - Black","product-1.png",10, "GOOGLE","OPIS",false,0,0,cart);
+    }
+
+
+
+
+    @PostMapping("/productAdd")
+    public void addProduct(@RequestBody Product product) {
+
+        System.out.println(product.toString());
+
+        Cart cart = cartRepository.findCartByClient_Id((long)1);
+
+        product.setCart(cart);
+        product.setImgName("img/"+product.getImgName());
+
         productRepository.save(product);
+
+
     }
 }

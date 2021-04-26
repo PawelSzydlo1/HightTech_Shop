@@ -1,7 +1,6 @@
 package com.example.hightech.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,8 +15,10 @@ public class Cart {
     private Long id;
 
 
-    private Double totalPrice;
+    private Double subTotal;
 
+
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id")
     private User client;
@@ -25,12 +26,12 @@ public class Cart {
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "carts")
+    @OneToMany(mappedBy = "cart")
     private Set<Product> products;
 
 
-    public Cart( Double totalPrice, User client) {
-        this.totalPrice = totalPrice;
+    public Cart(Double subTotal, User client) {
+        this.subTotal = subTotal;
         this.client = client;
     }
 
@@ -45,12 +46,12 @@ public class Cart {
         this.id = id;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Double getSubTotal() {
+        return subTotal;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
     }
 
     public User getClient() {

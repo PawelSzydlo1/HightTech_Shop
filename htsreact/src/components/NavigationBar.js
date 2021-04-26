@@ -13,7 +13,7 @@ export default class NavigationBar extends Component {
                 <div className="navbar navbar-expand-lg">
                     <Link to="/">
                     <a className="navbar-brand">
-                        <img src={logo}/>
+                        <img src={logo} alt="image"/>
 
                     </a>
                     </Link>
@@ -27,7 +27,21 @@ export default class NavigationBar extends Component {
                         <span className="navbar-toggle-icon"/>
                     </div>
                     <div className="collapse navbar-collapse " id="navbarNav">
+
                         <div className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <Link to="/formAdd">
+                                    <a className="nav-link">
+                                        <ButtonContainer>
+                                        <span className="mr-2">
+                                        <i className="fas fa-tools"/>
+                                        </span>
+                                            Add Product
+                                        </ButtonContainer>
+                                    </a>
+                                </Link>
+                            </li>
+
                             <li className="nav-item">
                                 <Link to="/service">
                                 <a className="nav-link">

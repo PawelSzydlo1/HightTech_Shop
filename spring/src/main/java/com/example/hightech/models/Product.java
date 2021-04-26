@@ -2,17 +2,16 @@ package com.example.hightech.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import javax.swing.*;
+
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
-import java.util.Set;
 
 
 @Entity
-@Table(name ="products")
-public class Product implements Serializable {
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,95 +25,141 @@ public class Product implements Serializable {
     private String company;
     @NotEmpty
     private String info;
-    @NotEmpty
-    private boolean inCart;
-    @NotEmpty
-    private int count;
-    @NotEmpty
-    private int total;
 
+    @NotEmpty
+    private String category;
+
+
+    private boolean inCart;
+
+    private int count;
+
+    private double total;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_id")
-    private Cart carts;
+    private Cart cart;
 
 
-
-    public Product(@NotEmpty String title, @NotEmpty String imgName, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty boolean inCart, @NotEmpty int count, @NotEmpty int total, Cart carts) {
+    public Product(@NotEmpty String title, @NotEmpty String imgName, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty String category, Cart cart) {
         this.title = title;
-        this.imgName = "./img/"+imgName;
+        this.imgName = "img/" + imgName;
         this.price = price;
         this.company = company;
         this.info = info;
-        this.inCart = inCart;
-        this.count = count;
-        this.total = total;
-        this.carts = carts;
+        this.category = category;
+        this.cart = cart;
+        this.inCart = false;
+        this.count = 0;
+        this.total = 0;
     }
 
     public Product() {
     }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getImgName() {
         return imgName;
     }
+
     public void setImgName(String imgIcon) {
         this.imgName = imgIcon;
     }
+
     public double getPrice() {
         return price;
     }
+
     public void setPrice(double price) {
         this.price = price;
     }
+
     public String getCompany() {
         return company;
     }
+
     public void setCompany(String company) {
         this.company = company;
     }
+
     public String getInfo() {
         return info;
     }
+
     public void setInfo(String info) {
         this.info = info;
     }
+
     public boolean isInCart() {
         return inCart;
     }
+
     public void setInCart(boolean inCart) {
         this.inCart = inCart;
     }
+
     public int getCount() {
         return count;
     }
+
     public void setCount(int count) {
         this.count = count;
     }
-    public int getTotal() {
+
+    public double getTotal() {
         return total;
     }
+
     public void setTotal(int total) {
         this.total = total;
     }
 
-    public Cart getCarts() {
-        return carts;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setCarts(Cart carts) {
-        this.carts = carts;
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", imgName='" + imgName + '\'' +
+                ", price=" + price +
+                ", company='" + company + '\'' +
+                ", info='" + info + '\'' +
+                ", category='" + category + '\'' +
+                ", inCart=" + inCart +
+                ", count=" + count +
+                ", total=" + total +
+                ", cart=" + cart +
+                '}';
     }
 }

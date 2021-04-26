@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import styled from "styled-components";
 import {ButtonContainer} from "../components/Button";
 import validate from "../Validate";
@@ -7,6 +7,8 @@ import {Link} from "react-router-dom";
 
 function Registration ({submitForm}) {
     const {handleChange, handleSubmit, values, errors} = ServiceRegistration(submitForm, validate);
+
+
         return (
             <RegistrationWrapper>
                 <div className="container d-flex ">

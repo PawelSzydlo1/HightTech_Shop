@@ -16,13 +16,16 @@ const api = axios.create({
 export default function ProductList() {
     const [status, setStatus] = useState(false);
 
+
     const [products, setProducts] = useState([]);
     const [details, setDetails] = useState([]);
 
-
     useEffect(() => {
         api.get('/').then(response => response.data)
-            .then(data => setProducts(data))
+            .then(data => {
+                setProducts(data);
+
+            })
 
     }, []);
 

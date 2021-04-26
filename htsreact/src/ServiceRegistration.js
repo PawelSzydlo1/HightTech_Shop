@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import SuccessfulRegistration from "./components/SuccessfulRegistration";
 
 const api = axios.create({
     baseURL: `http://localhost:8080`
