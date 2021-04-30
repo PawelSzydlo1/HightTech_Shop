@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Details ({details, changeStatus}) {
 
-        const {title, imgName, price, inCart,company, info }=details;
+        const {title, productImage, price, inCart,company, info }=details;
 
         return (
             <div className="container py-5">
@@ -18,7 +18,7 @@ export default function Details ({details, changeStatus}) {
 
                 <div className="row">
                     <div className="col-10 mx-auto col-md-6 my-3">
-                        <img src={imgName} className="img-fluid" alt="product"/>
+                        <img src={productImage} className="img-fluid" alt="product"/>
                     </div>
 
 

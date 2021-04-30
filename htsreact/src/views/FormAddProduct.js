@@ -10,20 +10,20 @@ const api = axios.create({
 
 function FormAddProduct() {
 
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [values, setValues]=useState({
         title:"",
         company:"",
         category:"Other",
         price:0,
         info:"",
-        imgName:""
     })
+    const [file, setFile]=useState('');
 
     const handleSubmit = e => {
         e.preventDefault();
-        setIsSubmitting(true);
+        sendFile();
+
+
 
 
     };
@@ -35,29 +35,43 @@ function FormAddProduct() {
         });
     };
 
-    useEffect(
-        () => {
-            if (isSubmitting) {
+    const sendFile = async () =>{
+        let data = new FormData();
+        data.append('file',file);
+        data.append('name',file.name);
 
-                api.post("/productAdd", values)
-                    .then(response => {
-                        if(response.data != null){
-                            console.log("wysyłam = " + values.title + " "+ values.company + " category -> " + values.category + " " + values.price + " " + values.imgName+ " " + values.info);
-                        }
+        const resp = await api.post("/addFile", data)
+console.log("Jestem w sens file");
+        if(resp!=null) {
+            console.log("Jestem w if  sens file");
+            sendData();
+        }
+
+
+    }
+    const sendData =()=>{
+        console.log("Jestem w setdata")
+
+        api.post("/productAdd", values).then(response => {
+                console.log("Jestem w api")
+                if(response.data != null){
+                    console.log("wysyłam = " + values.title + " "+ values.company + " category -> " + values.category + " " + values.price + " " + values.info);
+                    setValues({
+                        title:"",
+                        company:"",
+                        category:"Other",
+                        price:0,
+                        info:"",
+
                     });
-                setValues({
-                    title:"",
-                    company:"",
-                    category:"Other",
-                    price:0,
-                    info:"",
-                    imgName:""});
-            }
+                    setFile({file:''})
+                }
+            });
+
+        console.log(file);
+    }
 
 
-        },
-        [isSubmitting]
-    );
 
 
     return (
@@ -99,13 +113,13 @@ function FormAddProduct() {
                                     <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 py-1">
                                         <div className="form-group">
                                             <input
-                                                type="text"
+                                                type="file"
                                                 name="imgName"
                                                 id="imgName"
                                                 className="form-control input-sm"
                                                 placeholder="Img"
-                                                value={ values.imgName}
-                                                onChange={handleChange}
+
+                                                onChange={e=>setFile(e.target.files[0])}
                                                 required
                                                 autoComplete="off"
                                             />

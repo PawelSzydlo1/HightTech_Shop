@@ -14,30 +14,23 @@ const api = axios.create({
 })
 
 export default function ProductList() {
-    const [status, setStatus] = useState(false);
-
+    const [status, setStatus] = useState(true);
+    const [statusDownload, setStatusDownload] = useState(false);
+    const [filterPrice, setFilterPrice]=useState([]);
 
     const [products, setProducts] = useState([]);
+    const [products2, setProducts2] = useState([]);
     const [details, setDetails] = useState([]);
 
-    useEffect(() => {
-        api.get('/').then(response => response.data)
-            .then(data => {
-                setProducts(data);
-
-            })
-
-    }, []);
 
     const handleClick = e => {
         //e.preventDefault();
 
-        setStatus(true);
+        setStatus(false);
     }
 
     function changeStatus() {
-        setStatus(false);
-
+        setStatus(true);
     }
 
     const detailsFunction = (detail) => {
@@ -45,14 +38,50 @@ export default function ProductList() {
         setDetails(detail);
     }
 
+    const [searchText, setSearchText] = useState("");
+    const [searchTag, setSearchTag] = useState([]);
+    console.log("Search tg -> " + searchTag);
+
+    function search(prod) {
+        const productKeys = prod[0] && Object.keys(prod[0])
+        let filtr1 = prod.filter((product) =>
+            productKeys.some((key) => product[key].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1));
+        let filtr2 = filtr1.filter((product) => product["category"].toString().toLowerCase().indexOf(searchTag.toString().toLowerCase()) > -1);
+        let filtr3 = filtr2.filter((product) =>
+            product["price"]>filterPrice[0] && product["price"] <= filterPrice[1]);
+        console.log(filtr3)
+        return filtr3;
+    }
+
+    useEffect(() => {
+        api.get('/').then(response => response.data)
+            .then(data => {
+                for (let num in data){
+                    console.log("Liczba num "+ num +"oraz id " + data[num].id)
+                    fetch('http://localhost:8080/productList/file/'+data[num].id)
+                        .then(response=>{
+                            console.log(response);
+                            response.blob().then(blob=>{
+                                data[num].productImage= window.URL.createObjectURL(blob)
+                                console.log(data);
+                            })
+                        })}
+                setProducts(data);
+                setProducts2(products)
+                setStatusDownload(true);
+
+
+            })
+    }, [statusDownload, products.length]);
+
     return (
         <ProductListWrapper>
-            {(status === false) ? (
+            {(status ) ? (
                 <div className="row ">
                     <div className="col-3 ">
 
                         <div className="container ">
-                            <Filter/>
+                            <Filter setSearchText={setSearchText} searchTag={searchTag} setSearchTag={setSearchTag} setFilterPrice={setFilterPrice}/>
                         </div>
                     </div>
                     <div className="col-9">
@@ -60,13 +89,14 @@ export default function ProductList() {
                             <Title name="our" title="products"/>
 
                             <div className="row">
-
-                                {products.map(product => (
-                                    <Product product={product}
-                                             detailsFunction={detailsFunction}/>
-                                ))
-                                }
-
+                                {statusDownload ? (
+                                    search(products2).map(product => (
+                                            <Product product={product}
+                                                     detailsFunction={detailsFunction}/>
+                                        ))
+                                ):(
+                                    <div className="spinner-border" role="status"/>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -1,13 +1,9 @@
 package com.example.hightech.models;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
 import javax.validation.constraints.NotEmpty;
-
 
 @Entity
 @Table(name = "products")
@@ -17,13 +13,15 @@ public class Product {
     private Long id;
     @NotEmpty
     private String title;
-    @NotEmpty
-    private String imgName;
+
+
     @NotEmpty
     private double price;
     @NotEmpty
     private String company;
     @NotEmpty
+    @Lob
+    @Column(name = "info", length = 1500)
     private String info;
 
     @NotEmpty
@@ -41,10 +39,15 @@ public class Product {
     @JoinColumn(name = "card_id")
     private Cart cart;
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
+    private ProductImage productImage;
 
-    public Product(@NotEmpty String title, @NotEmpty String imgName, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty String category, Cart cart) {
+
+    public Product(@NotEmpty String title, @NotEmpty ProductImage productImage, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty String category, Cart cart) {
         this.title = title;
-        this.imgName = "img/" + imgName;
+        this.productImage=productImage;
         this.price = price;
         this.company = company;
         this.info = info;
@@ -74,13 +77,6 @@ public class Product {
         this.title = title;
     }
 
-    public String getImgName() {
-        return imgName;
-    }
-
-    public void setImgName(String imgIcon) {
-        this.imgName = imgIcon;
-    }
 
     public double getPrice() {
         return price;
@@ -146,12 +142,24 @@ public class Product {
         this.category = category;
     }
 
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public ProductImage getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(ProductImage productImage) {
+        this.productImage = productImage;
+    }
+
+
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", imgName='" + imgName + '\'' +
                 ", price=" + price +
                 ", company='" + company + '\'' +
                 ", info='" + info + '\'' +
@@ -160,6 +168,7 @@ public class Product {
                 ", count=" + count +
                 ", total=" + total +
                 ", cart=" + cart +
+                ", productImage=" + productImage +
                 '}';
     }
 }

@@ -1,30 +1,40 @@
 package com.example.hightech.controllers;
 
 import com.example.hightech.models.Cart;
+import com.example.hightech.models.ProductImage;
 import com.example.hightech.models.Product;
-import com.example.hightech.models.User;
 import com.example.hightech.repository.CartRepository;
+import com.example.hightech.repository.ProductImageRepository;
 import com.example.hightech.repository.ProductRepository;
-import com.example.hightech.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
-    @Autowired
     private final ProductRepository productRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
+    private final ProductImageRepository productImageRepository;
 
+    private ProductImage productImage;
     @Autowired
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, CartRepository cartRepository, ProductImageRepository productImageRepository) {
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
+        this.productImageRepository = productImageRepository;
     }
 
     @GetMapping("/productList")
@@ -40,21 +50,61 @@ public class ProductController {
 
     }
 
+    @GetMapping("/productCategory")
+    public List<String> getProductsCategory(){
+        return productRepository.getAllCategory();
+    }
 
 
 
     @PostMapping("/productAdd")
-    public void addProduct(@RequestBody Product product) {
+    public void addProduct(@RequestBody JsonNode jsonProduct) {
 
-        System.out.println(product.toString());
-
+        System.out.println(jsonProduct);
         Cart cart = cartRepository.findCartByClient_Id((long)1);
 
-        product.setCart(cart);
-        product.setImgName("img/"+product.getImgName());
+        Product product= new Product(
+                        jsonProduct.get("title").asText(),
+                        productImage,
+                        jsonProduct.get("price").asDouble(),
+                        jsonProduct.get("company").asText(),
+                        jsonProduct.get("info").asText(),
+                        jsonProduct.get("category").asText(),
+                        cart
 
+        );
+
+        System.out.println(product);
         productRepository.save(product);
 
 
     }
+
+    @PostMapping(value = "/addFile")
+    public ResponseEntity<Void> addFile(@NotNull @RequestParam("file") MultipartFile multipartFile) throws IOException {
+        productImage = new ProductImage(multipartFile.getOriginalFilename(), multipartFile.getContentType(),  multipartFile.getBytes());
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+
+    @GetMapping(value = "/productList/file/{id}")
+    public ResponseEntity<byte[]> getFile(@PathVariable("id") Long id){
+
+        ProductImage productImg  = productImageRepository.findById(id).get();
+
+        HttpHeaders header = new HttpHeaders();
+
+
+
+        header.setContentType(MediaType.valueOf(productImg.getContentType()));
+        header.setContentLength(productImg.getData().length);
+        header.set("Content-Disposition", "attachment; filename=" + productImg.getFileName());
+
+        return new ResponseEntity<>(productImg.getData(), header, HttpStatus.OK);
+    }
+
+
+
 }

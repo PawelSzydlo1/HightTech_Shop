@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export default function Product({product, detailsFunction}) {
 
-        const {id,  title, imgName, price, inCart}=product;
+        const {id,  title, productImage, price, inCart}=product;
 
         return (
             <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
@@ -13,7 +13,7 @@ export default function Product({product, detailsFunction}) {
                         onClick={() => console.log("you clicked me on the image container")}>
 
                         <div onClick={() => detailsFunction(product)}>
-                                <img src={imgName} alt="product" className="card-img-top"  />
+                                <img src={productImage} alt="product" className="card-img-top"  />
                         </div>
                         <button
                             className="cart-btn"

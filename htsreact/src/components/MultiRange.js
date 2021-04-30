@@ -1,44 +1,50 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import Slider from '@material-ui/core/Slider';
 import styled from "styled-components";
 
-class MultiRange extends Component {
+export default function MultiRange ({setFilterPrice}) {
 
-    value = [0, 1500];
-    handleChange = (event, newValue) => {
-        this.setState(this.value = newValue);
+
+    const [value, setValue]=useState([0,19999])
+
+    const handleChange = (event, newValue) => {
+        setFilterPrice(newValue)
+        setValue(newValue);
+
     }
 
-    inputChange = (event) => {
-        const val = this.value;
+    const inputChange = (event) => {
+        const val = value;
         val[event.target.name] = event.target.value;
-        this.setState(val);
+        setValue(val);
+        setFilterPrice(val);
     }
 
-    render() {
+    useEffect(() => {
+        setFilterPrice(value);
+    },[])
+
         return (
             <MultiRangeWrapper>
                 <div className="d-flex justify-content-evenly align-items-center">
-                    <input type="text" name="0" className="form-control" value={this.value[0]}
-                           onChange={this.inputChange}/>
+                    <input type="text" name="0" className="form-control" value={value[0]}
+                           onChange={inputChange}/>
                     <label className="fs-4">-</label>
-                    <input type="text" name="1" className="form-control" value={this.value[1]}
-                           onChange={this.inputChange}/>
+                    <input type="text" name="1" className="form-control" value={value[1]}
+                           onChange={inputChange}/>
                 </div>
 
                 <Slider
-                    value={this.value}
-                    max={2000}
-                    onChange={this.handleChange}
+                    value={value}
+                    max={20000}
+                    onChange={handleChange}
                     valueLabelDisplay="auto"
                     aria-labelledby="range-slider"
                 />
             </MultiRangeWrapper>
         );
     }
-}
 
-export default MultiRange;
 
 const MultiRangeWrapper = styled.div`
   .form-control {
