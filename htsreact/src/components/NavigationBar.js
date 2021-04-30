@@ -6,8 +6,8 @@ import {ButtonContainer} from "./Button";
 import {Link} from "react-router-dom";
 
 
-export default class NavigationBar extends Component {
-    render() {
+export default function NavigationBar() {
+
         return (
             <NavWrapper>
                 <div className="navbar navbar-expand-lg">
@@ -85,7 +85,6 @@ export default class NavigationBar extends Component {
             </NavWrapper>
         );
     }
-}
 
 const NavWrapper = styled.div`
   background: var(--mainBlue);
