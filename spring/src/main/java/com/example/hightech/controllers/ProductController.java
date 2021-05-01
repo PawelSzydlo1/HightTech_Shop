@@ -74,7 +74,7 @@ public class ProductController {
 
         );
 
-        System.out.println(product);
+        //System.out.println(product);
         productRepository.save(product);
 
 
@@ -105,6 +105,16 @@ public class ProductController {
         return new ResponseEntity<>(productImg.getData(), header, HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/changecount/{id}/{number}")
+    public void changeCount(@PathVariable("id") Long id, @PathVariable ("number") int number){
+        Product product = productRepository.findById(id).orElse(null);
+        assert product != null;
+        product.setCount(product.getCount()+number);
+        product.setTotal((product.getPrice())*(product.getCount()));
+
+        productRepository.save(product);
+    }
 
 
 }

@@ -41,9 +41,7 @@ function FormAddProduct() {
         data.append('name',file.name);
 
         const resp = await api.post("/addFile", data)
-console.log("Jestem w sens file");
         if(resp!=null) {
-            console.log("Jestem w if  sens file");
             sendData();
         }
 

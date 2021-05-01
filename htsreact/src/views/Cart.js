@@ -17,15 +17,13 @@ export default function Cart() {
 
     useEffect(() => {
 
-        api.get('/'+ id_user).then(response => response.data)
-            .then(data => setCart(data))
+        api.get('/' + id_user).then(response => response.data)
+            .then(data => {
+
+
+                setCart(data)
+            })
     }, []);
-
-
-    console.log(cart);
-
-
-
 
 
     return (
@@ -33,20 +31,15 @@ export default function Cart() {
             {(cart) ? (
                 <div>
                     <Title name="your" title="cart"/>
-                <CartColumns/>
-
-                <CartList cart={cart}/>
-
-                <CartTotals/>
-
+                    <CartColumns/>
+                    <CartList cart={cart}/>
+                    <CartTotals/>
                 </div>
-                ):
-                (
+            ) : (
                 <EmptyCart/>
-                )
+            )
             }
         </div>
-
 
 
     )

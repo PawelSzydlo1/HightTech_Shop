@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import CartItem from "./CartItem";
 import axios from "axios";
 
@@ -10,23 +10,34 @@ const api = axios.create({
 
 export default function CartList({cart}){
     const [products, setProducts]=useState([]);
-
-    const {id,subTotal}=cart;
+    const [status, setStatus]=useState(false);
+    const changeStatus = (data) =>{
+        setProducts(data);
+        setStatus(true);
+    }
 
     useEffect(() => {
 
         api.get('/').then(response => response.data)
-            .then(data => setProducts(data))
+            .then(data => {
+                changeStatus(data);
+
+            })
     }, []);
 
     console.log("Product"+ products);
 
 
     return (
-        <div className="container-fluid">
-            {products.map(product => (
-                <CartItem key={product.id} product={product} />
-            ))}
+        <div className="container-fluid ">
+            {(status) ? (
+                products.map(product => (
+                        <CartItem key={product.id} product={product} cart={cart}/>
+                    ))
+            ):(
+                <div className="spinner-border" role="status"/>
+            )}
+
         </div>
     );
 }

@@ -36,7 +36,7 @@ public class CartController {
     public void adaCart() {
         int adminId=1;
         User user=userRepository.findById((long) adminId).orElse(null);
-        System.out.println("user->" + user);
+        //System.out.println("user->" + user);
 
         Cart cart = new Cart(0.0,user);
         cartRepository.save(cart);

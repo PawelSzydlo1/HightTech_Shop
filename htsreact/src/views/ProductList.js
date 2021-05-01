@@ -40,7 +40,7 @@ export default function ProductList() {
 
     const [searchText, setSearchText] = useState("");
     const [searchTag, setSearchTag] = useState([]);
-    console.log("Search tg -> " + searchTag);
+
 
     function search(prod) {
         const productKeys = prod[0] && Object.keys(prod[0])
@@ -49,30 +49,40 @@ export default function ProductList() {
         let filtr2 = filtr1.filter((product) => product["category"].toString().toLowerCase().indexOf(searchTag.toString().toLowerCase()) > -1);
         let filtr3 = filtr2.filter((product) =>
             product["price"]>filterPrice[0] && product["price"] <= filterPrice[1]);
-        console.log(filtr3)
+
         return filtr3;
     }
 
+    const changeStatusDownload = ()=> {
+        setProducts2(products)
+
+        console.log("Product2");
+        console.log(products2);
+        setStatusDownload(true);
+    }
+
     useEffect(() => {
+
         api.get('/').then(response => response.data)
             .then(data => {
                 for (let num in data){
-                    console.log("Liczba num "+ num +"oraz id " + data[num].id)
                     fetch('http://localhost:8080/productList/file/'+data[num].id)
                         .then(response=>{
                             console.log(response);
                             response.blob().then(blob=>{
                                 data[num].productImage= window.URL.createObjectURL(blob)
-                                console.log(data);
+                                console.log("Jestem w petli ----");
                             })
-                        })}
+                        })
+                }
+
                 setProducts(data);
-                setProducts2(products)
-                setStatusDownload(true);
+                changeStatusDownload();
+
 
 
             })
-    }, [statusDownload, products.length]);
+    }, [statusDownload]);
 
     return (
         <ProductListWrapper>
