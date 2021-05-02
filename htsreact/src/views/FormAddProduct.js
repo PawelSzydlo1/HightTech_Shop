@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import {ButtonContainer} from "../components/Button";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -16,12 +16,13 @@ function FormAddProduct() {
         category:"Other",
         price:0,
         info:"",
+        productImage:""
     })
-    const [file, setFile]=useState('');
+    let file='';
 
     const handleSubmit = e => {
         e.preventDefault();
-        sendFile();
+        sendData();
 
 
 
@@ -35,40 +36,42 @@ function FormAddProduct() {
         });
     };
 
-    const sendFile = async () =>{
-        let data = new FormData();
-        data.append('file',file);
-        data.append('name',file.name);
 
-        const resp = await api.post("/addFile", data)
-        if(resp!=null) {
-            sendData();
-        }
+
+    const fileChange = async e =>{
+        file= e.target.files[0];
+
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (  ) => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+        const base64String = await toBase64(file);
+        setValues({...values,productImage: base64String})
 
 
     }
-    const sendData =()=>{
-        console.log("Jestem w setdata")
+
+    const sendData = async ()=>{
 
         api.post("/productAdd", values).then(response => {
                 console.log("Jestem w api")
                 if(response.data != null){
-                    console.log("wysyłam = " + values.title + " "+ values.company + " category -> " + values.category + " " + values.price + " " + values.info);
+                    //console.log("wysyłam = " + values.title + " "+ values.company + " category -> " + values.category + " " + values.price + " " + values.info + "  "+ values.productImage);
                     setValues({
                         title:"",
                         company:"",
                         category:"Other",
                         price:0,
                         info:"",
+                        productImage: ""
 
                     });
-                    setFile({file:''})
+                    file= "";
                 }
             });
-
-        console.log(file);
     }
-
 
 
 
@@ -117,7 +120,7 @@ function FormAddProduct() {
                                                 className="form-control input-sm"
                                                 placeholder="Img"
 
-                                                onChange={e=>setFile(e.target.files[0])}
+                                                onChange={fileChange}
                                                 required
                                                 autoComplete="off"
                                             />

@@ -34,18 +34,18 @@ public class Product {
 
     private double total;
 
+
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "card_id")
     private Cart cart;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "file_id", referencedColumnName = "id")
-    private ProductImage productImage;
+    @Lob
+    private String productImage;
 
-
-    public Product(@NotEmpty String title, @NotEmpty ProductImage productImage, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty String category, Cart cart) {
+    public Product(@NotEmpty String title, @NotEmpty String productImage, @NotEmpty double price, @NotEmpty String company, @NotEmpty String info, @NotEmpty String category, Cart cart) {
         this.title = title;
         this.productImage=productImage;
         this.price = price;
@@ -146,11 +146,11 @@ public class Product {
         this.total = total;
     }
 
-    public ProductImage getProductImage() {
+    public String getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(ProductImage productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 

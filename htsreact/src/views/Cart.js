@@ -19,8 +19,6 @@ export default function Cart() {
 
         api.get('/' + id_user).then(response => response.data)
             .then(data => {
-
-
                 setCart(data)
             })
     }, []);

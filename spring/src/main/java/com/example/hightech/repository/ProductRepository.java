@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends CrudRepository<Product,Long> {
 
-
     Product findProductsByCart_Id(Long id);
 
     @Query(nativeQuery = true,value = "SELECT p.category FROM products AS p GROUP BY p.category")
     List<String> getAllCategory();
+
+
 
 }

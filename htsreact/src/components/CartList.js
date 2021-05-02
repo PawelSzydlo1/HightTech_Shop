@@ -11,21 +11,27 @@ const api = axios.create({
 export default function CartList({cart}){
     const [products, setProducts]=useState([]);
     const [status, setStatus]=useState(false);
-    const changeStatus = (data) =>{
-        setProducts(data);
-        setStatus(true);
-    }
-
     useEffect(() => {
+        api.get('/')
+            .then(response => {
+                Promise.all(response.data.map(num =>
+                    api.get('http://localhost:8080/productList/file/' + num.id)
+                        .then(resp => resp.data)
+                        .then(data => {
+                            return {num, data};
+                        }))
+                ).then(v => {
+                        v.map(k => k.num.productImage = k.data)
 
-        api.get('/').then(response => response.data)
-            .then(data => {
-                changeStatus(data);
-
+                        setProducts(response.data);
+                        setStatus(true);
+                    }
+                );
             })
+
     }, []);
 
-    console.log("Product"+ products);
+
 
 
     return (
