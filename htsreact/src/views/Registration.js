@@ -129,7 +129,6 @@ export default Registration;
 
 const RegistrationWrapper = styled.div`
   input {
-    text-transform: capitalize;
     font-size: larger;
     background: transparent;
     border-radius: 0.5rem;

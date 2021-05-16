@@ -1,49 +1,58 @@
-
 import logo from "../logo.svg";
 
 import styled from "styled-components";
 import {ButtonContainer} from "./Button";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import {useSelector,useDispatch} from "react-redux";
+import {signout} from "../authorization/ActionAuth";
 
 
 export default function NavigationBar() {
 
-        return (
-            <NavWrapper>
-                <div className="navbar navbar-expand-lg">
-                    <Link to="/">
+    const auth = useSelector(state => state.auth)
+    const dispatch = useDispatch();
+    const history = useHistory()
+    const handleLogout = () => {
+        dispatch(signout()).then(() => {
+            history.replace("/");
+        });
+    }
+    return (
+        <NavWrapper>
+            <div className="navbar navbar-expand-lg">
+                <Link to="/">
                     <a className="navbar-brand">
                         <img src={logo} alt="image"/>
 
                     </a>
-                    </Link>
-                    <Link to="/">
+                </Link>
+                <Link to="/">
                     <a className="navbar-brand">
                         HighTech Shop
                     </a>
-                    </Link>
-                    <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggle-icon"/>
-                    </div>
-                    <div className="collapse navbar-collapse " id="navbarNav">
+                </Link>
+                <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggle-icon"/>
+                </div>
+                <div className="collapse navbar-collapse " id="navbarNav">
 
-                        <div className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link to="/formAdd">
-                                    <a className="nav-link">
-                                        <ButtonContainer>
+                    <div className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <Link to="/formAdd">
+                                <a className="nav-link">
+                                    <ButtonContainer>
                                         <span className="mr-2">
                                         <i className="fas fa-tools"/>
                                         </span>
-                                            Add Product
-                                        </ButtonContainer>
-                                    </a>
-                                </Link>
-                            </li>
+                                        Add Product
+                                    </ButtonContainer>
+                                </a>
+                            </Link>
+                        </li>
 
-                            <li className="nav-item">
-                                <Link to="/service">
+                        <li className="nav-item">
+                            <Link to="/service">
                                 <a className="nav-link">
                                     <ButtonContainer>
                                         <span className="mr-2">
@@ -52,11 +61,11 @@ export default function NavigationBar() {
                                         Service
                                     </ButtonContainer>
                                 </a>
-                                </Link>
-                            </li>
+                            </Link>
+                        </li>
 
-                            <li className="nav-item">
-                                <Link to="/cart">
+                        <li className="nav-item">
+                            <Link to="/cart">
                                 <a className="nav-link">
                                     <ButtonContainer>
                                         <span className="mr-2">
@@ -66,25 +75,45 @@ export default function NavigationBar() {
                                     </ButtonContainer>
                                 </a>
                             </Link>
-                            </li>
+                        </li>
+
+                        {(auth.login)?(
                             <li className="nav-item">
-                                <Link to="/successfulLogin">
-                                <a className="nav-link">
-                                    <ButtonContainer>
+                                <Link to="/">
+                                    <a className="nav-link"  onClick={handleLogout}>
+                                        <ButtonContainer>
                                         <span className="ml-2 mr-2">
                                             <i className="fas fa-users-cog"/>
                                         </span>
-                                        Login
-                                    </ButtonContainer>
-                                </a>
+                                            Logout
+                                        </ButtonContainer>
+                                    </a>
                                 </Link>
                             </li>
-                        </div>
+                        ):(
+                            <li className="nav-item">
+                                <Link to="/successfulLogin">
+                                    <a className="nav-link">
+                                        <ButtonContainer>
+                                        <span className="ml-2 mr-2">
+                                            <i className="fas fa-users-cog"/>
+                                        </span>
+                                            Login
+                                        </ButtonContainer>
+                                    </a>
+                                </Link>
+                            </li>
+                        )}
+
+
+
+
                     </div>
                 </div>
-            </NavWrapper>
-        );
-    }
+            </div>
+        </NavWrapper>
+    );
+}
 
 const NavWrapper = styled.div`
   background: var(--mainBlue);
@@ -96,10 +125,12 @@ const NavWrapper = styled.div`
     text-transform: capitalize;
     padding: 0.4rem 1rem;
   }
-  a{
-  text-decoration: none;
+
+  a {
+    text-decoration: none;
   }
-  img{
+
+  img {
     width: 3rem;
   }
 `;

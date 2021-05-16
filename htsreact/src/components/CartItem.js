@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/`
+    baseURL: `http://localhost:8080/api/`
 })
 
 export default function CartItem({product}) {

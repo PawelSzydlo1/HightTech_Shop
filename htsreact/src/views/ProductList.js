@@ -9,7 +9,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/productList/`
+    baseURL: `http://localhost:8080/api/productList/`
 })
 
 export default function ProductList() {
@@ -42,7 +42,8 @@ export default function ProductList() {
 
 
     function search(prod) {
-        const productKeys = prod[0] && Object.keys(prod[0])
+       // const productKeys = prod[0] && Object.keys(prod[0])
+        const productKeys =["price","title","info","category","company"];
         let filtr1 = prod.filter((product) =>
             productKeys.some((key) => product[key].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1));
         let filtr2 = filtr1.filter((product) => product["category"].toString().toLowerCase().indexOf(searchTag.toString().toLowerCase()) > -1);
@@ -56,7 +57,7 @@ export default function ProductList() {
         api.get('/')
             .then(response => {
                 Promise.all(response.data.map(num =>
-                    api.get('http://localhost:8080/productList/file/' + num.id)
+                    api.get('/file/' + num.id)
                         .then(resp => resp.data)
                         .then(data => {
                             return {num, data};

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: `http://localhost:8080`
+    baseURL: `http://localhost:8080/api/`
 })
 
 const ServiceRegistration = (submitForm, validate) => {
@@ -36,12 +36,8 @@ const ServiceRegistration = (submitForm, validate) => {
         () => {
             if (Object.keys(errors).length === 0 && isSubmitting) {
 
-                api.post("http://localhost:8080/registration", values)
-                    .then(response => {
-                        if(response.data != null){
-                            console.log("wysyłam = " + values.name + " "+ values.surname + " " + values.password + " " + values.email);
-                        }
-                    });
+                api.post("registration", values)
+
 
                 submitForm();
             }

@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/productList/`
+    baseURL: `http://localhost:8080/api/productList/`
 })
 
 export default function CartList({cart}){
@@ -15,7 +15,7 @@ export default function CartList({cart}){
         api.get('/')
             .then(response => {
                 Promise.all(response.data.map(num =>
-                    api.get('http://localhost:8080/productList/file/' + num.id)
+                    api.get('file/' + num.id)
                         .then(resp => resp.data)
                         .then(data => {
                             return {num, data};

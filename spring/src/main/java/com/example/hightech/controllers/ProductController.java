@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping(value = "/api")
 public class ProductController {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
@@ -72,7 +73,7 @@ public class ProductController {
         Product product =productRepository.findById(id).orElse(null);
 
         assert product != null;
-        System.out.println(product.getProductImage());
+        //System.out.println(product.getProductImage());
         return product.getProductImage();
 
     }

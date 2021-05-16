@@ -1,43 +1,31 @@
-import React, { useState} from 'react';
+import React from 'react';
 
 import {Link} from "react-router-dom";
 import Login from "../views/Login";
 import {ButtonContainer} from "./Button";
+import {useSelector} from "react-redux";
 
 function SuccessfulLogin() {
 
-
-    const [user, setUser] = useState({email: ""});
-    const [error, setError] = useState("");
-
-    const CheckLogin = data => {
-
-
-        if(data !== ""){
-            console.log(data.email);
-            setUser({
-                email: data.email
-            });
-        } else{
-            setError("Wrong email or password!")
-        }
-    }
+    const auth = useSelector(state => state.auth)
 
     return (
         <div className='container'>
 
-            {(user.email !== "") ? (
+            {(auth.login) ? (
                 <div className=" container align-content-center d-flex justify-content-center h-75">
                 <Link to='/'>
                     <ButtonContainer className='button-welcome'>You are logged in!</ButtonContainer>
                 </Link>
                 </div>
             ) : (
-                <Login CheckLogin={CheckLogin} error={error}/>
+                <Login />
             )}
         </div>
     )
 }
+
+
 
 
 

@@ -2,7 +2,11 @@ package com.example.hightech.controllers;
 
 import com.example.hightech.models.User;
 import com.example.hightech.repository.UserRepository;
+import com.example.hightech.security.JsonWebTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +15,17 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping(value = "/api")
 public class UserController {
-    @Autowired
+
     private final UserRepository userRepository;
+    private final JsonWebTokenProvider jsonWebTokenProvider;
 
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, JsonWebTokenProvider jsonWebTokenProvider) {
         this.userRepository = userRepository;
+        this.jsonWebTokenProvider = jsonWebTokenProvider;
     }
 
 
@@ -45,22 +52,30 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public User loggedUser(@RequestBody User data){
+    public ResponseEntity<?> loggedUser(@RequestBody User data){
         System.out.println(data.getEmail() + " " + data.getPassword());
 
         String salt = userRepository.getSaltByEmail(data.getEmail());
 
         if(salt==null){
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return userRepository.getUserByEmailAndPassword(
+        User loginUser = userRepository.getUserByEmailAndPassword(
                 data.getEmail(),
                 BCrypt.hashpw(
                         data.getPassword(),
                         salt
                 )
         );
+
+        if(loginUser==null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
+        Pair<Long, String> userIdWithTokenPair = Pair.of(loginUser.getId(), jsonWebTokenProvider.generateToken(loginUser));
+        return new ResponseEntity<>(userIdWithTokenPair, HttpStatus.OK);
+
     }
 
 
