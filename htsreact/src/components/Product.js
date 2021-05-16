@@ -1,48 +1,44 @@
 
 import styled from "styled-components";
+import axios from "axios";
+import {useSelector} from "react-redux";
 
+const api = axios.create({
+    baseURL: `http://localhost:8080/api/`
+})
 export default function Product({product, detailsFunction}) {
-
+        const auth = useSelector(state => state.auth)
         const {id,  title, productImage, price, inCart}=product;
+        const addToCart = () => {
+            console.log("add to cart");
+        api.get("/changecart/"+id.toString()+"/"+auth.user.first.toString());
 
+
+
+        }
         return (
             <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
                 <div className="card">
                     <div
-                        className="img-container p-5"
-                        onClick={() => console.log("you clicked me on the image container")}>
+                        className="img-container p-5">
 
                         <div onClick={() => detailsFunction(product)}>
                                 <img src={productImage} alt="product" className="card-img-top"  />
                         </div>
-                        <button
-                            className="cart-btn"
-                            disabled={inCart}
-                        >
-                            {inCart ? (
-                                <p className="text-capitalize mb-0 " disabled>
-                                    {" "}
-                                    in cart
-                                </p>
-                            ) : (
-                                <i className="fas fa-cart-plus"/>
-                            )}
+                        <button className="cart-btn" disabled={inCart} onClick={addToCart}>
+                          <i className="fas fa-cart-plus"/>
                         </button>
                     </div>
-                    {/* card footer*/}
                     <div className="card-footer d-flex justify-content-between">
                         <p className="align-self-center mb-0">{title}</p>
                         <h5 className=" text-blue font-italic mb-0">
                             <span className="mr-1">$</span>
                             {price}
                         </h5>
-
-
                     </div>
                 </div>
             </ProductWrapper>
         );
-
 }
 
 const ProductWrapper = styled.div`

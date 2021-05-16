@@ -1,14 +1,24 @@
 
 import {ButtonContainer} from "./Button";
 import React from "react";
+import axios from "axios";
+import {useSelector} from "react-redux";
 
+const api = axios.create({
+    baseURL: `http://localhost:8080/api/`
+})
 export default function Details ({details, changeStatus}) {
 
         const {title, productImage, price, inCart,company, info }=details;
+    const auth = useSelector(state => state.auth)
+    const addToCart = () => {
+        console.log("add to cart");
+        api.get("/changecart/" + details.id.toString() + "/" + auth.user.first.toString());
+    }
 
         return (
             <div className="container py-5">
-                {/*title*/}
+
                 <div className="row">
                     <div className="col-10 mx-auto text-center text-slanted text-blue my-5">
                         <h1>{title}</h1>
@@ -46,9 +56,9 @@ export default function Details ({details, changeStatus}) {
                         <ButtonContainer
                             cart
                             disable={inCart}
+                            onClick={()=>addToCart()}
                         >
-
-                            {inCart ? "inCart" : "add to cart"}
+                            add to cart
                         </ButtonContainer>
 
                     </div>

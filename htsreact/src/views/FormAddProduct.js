@@ -5,7 +5,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080`
+    baseURL: `http://localhost:8080/api`
 })
 
 function FormAddProduct() {
@@ -53,12 +53,11 @@ function FormAddProduct() {
 
     }
 
-    const sendData = async ()=>{
+    const sendData =()=>{
 
         api.post("/productAdd", values).then(response => {
-                console.log("Jestem w api")
+
                 if(response.data != null){
-                    //console.log("wysyłam = " + values.title + " "+ values.company + " category -> " + values.category + " " + values.price + " " + values.info + "  "+ values.productImage);
                     setValues({
                         title:"",
                         company:"",
@@ -66,15 +65,11 @@ function FormAddProduct() {
                         price:0,
                         info:"",
                         productImage: ""
-
                     });
                     file= "";
                 }
             });
     }
-
-
-
     return (
         <FormAddWrapper>
             <div className="container d-flex ">
@@ -94,7 +89,6 @@ function FormAddProduct() {
                             </div>
                             <div className="panel-body">
                                 <form role="form" onSubmit={handleSubmit}>
-
                                     <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 py-1">
                                         <div className="form-group">
                                             <input
@@ -108,7 +102,6 @@ function FormAddProduct() {
                                                 required
                                                 autoComplete="off"
                                             />
-
                                         </div>
                                     </div>
                                     <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 py-1">
@@ -124,11 +117,8 @@ function FormAddProduct() {
                                                 required
                                                 autoComplete="off"
                                             />
-
                                         </div>
                                     </div>
-
-
                                     <div className="form-group py-1">
                                         <input
                                             type="number"
@@ -142,7 +132,6 @@ function FormAddProduct() {
                                             required
                                             autoComplete="off"
                                         />
-
                                     </div>
                                     <div className="form-group py-1">
                                         <select
@@ -158,10 +147,7 @@ function FormAddProduct() {
                                             <option value="Computer" >Computer</option>
                                             <option value="Disc" >Disc</option>
                                         </select>
-
-
                                     </div>
-
                                     <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 py-1">
                                         <div className="form-group">
                                             <input
@@ -172,35 +158,26 @@ function FormAddProduct() {
                                                 placeholder="Company"
                                                 value={values.company}
                                                 onChange={handleChange}
-
                                             />
-
                                         </div>
                                     </div>
                                     <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 py-1 ">
                                         <div className="form-group">
                                                 <textarea
-
                                                     name="info"
                                                     id="info"
                                                     className="form-control input-sm "
                                                     placeholder="Add info"
                                                     value={values.info}
                                                     onChange={handleChange}
-
-
                                                 />
-
                                         </div>
                                     </div>
-
-
                                     <div className="row-cols-3 d-flex justify-content-center align-content-center">
                                         <ButtonContainer type="submit" className="add">
                                             Add
                                         </ButtonContainer>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
@@ -209,23 +186,16 @@ function FormAddProduct() {
                 </div>
             </div>
         </FormAddWrapper>
-
     );
-
 }
-
-
 export default FormAddProduct;
-
 const FormAddWrapper = styled.div`
   .edit {
     font-size: medium;
   }
-
   .add {
     font-size: large;
   }
-
   textarea {
     height: 10rem;
   }
