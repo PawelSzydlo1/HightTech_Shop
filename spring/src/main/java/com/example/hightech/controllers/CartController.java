@@ -8,33 +8,28 @@ import com.example.hightech.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/api")
 public class CartController {
 
-    @Autowired
     private final CartRepository cartRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CartController(CartRepository cartRepository) {
+    public CartController(CartRepository cartRepository, UserRepository userRepository) {
         this.cartRepository = cartRepository;
+        this.userRepository = userRepository;
     }
-
     @GetMapping("/cartList")
     public Iterable<Cart> runProductRepository(){
         return cartRepository.findAll();
     }
 
     @GetMapping("/cartAdd")
-    public void adaCart() {
+    public void addCart() {
         int adminId=1;
         User user=userRepository.findById((long) adminId).orElse(null);
-        //System.out.println("user->" + user);
 
         Cart cart = new Cart(0.0,user);
         cartRepository.save(cart);
@@ -46,5 +41,7 @@ public class CartController {
         return cartRepository.findCartByClient_Id(id);
 
     }
+
+
 
 }

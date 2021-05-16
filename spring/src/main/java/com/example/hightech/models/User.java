@@ -5,7 +5,6 @@ import javax.validation.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name ="users")
@@ -30,6 +29,7 @@ public class User  implements Serializable {
     @NotEmpty
     private String salt;
 
+    private String role;
 
     @JsonIgnore
     @OneToOne(mappedBy = "client")
@@ -40,7 +40,6 @@ public class User  implements Serializable {
         this.surname = surname;
         this.email = email;
         this.password = password;
-
     }
 
 
@@ -92,5 +91,13 @@ public class User  implements Serializable {
 
     public void setCarts(Cart carts) {
         this.carts = carts;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

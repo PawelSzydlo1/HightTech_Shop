@@ -38,7 +38,7 @@ public class Product {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @JsonIgnore

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -27,15 +27,15 @@ public class ProductController {
     }
 
     @GetMapping("/productList")
-    public Iterable<Product> runProductRepository(){
-        return productRepository.findAll();
+    public List<Product> runProductRepository(){
+
+        return productRepository.getProductsByClient_Role();
     }
 
 
     @GetMapping("/productList/{id}")
-    public Product getCartById(@PathVariable("id") Long id){
-        Optional<Product> optionalCart = Optional.ofNullable(productRepository.findProductsByCart_Id(id));
-        return optionalCart.orElse(null);
+    public List<Product> getCartById(@PathVariable("id") Long id){
+        return productRepository.getProductsByCart_Client_Id(id);
 
     }
 
@@ -49,7 +49,6 @@ public class ProductController {
     @PostMapping("/productAdd")
     public void addProduct(@RequestBody JsonNode jsonProduct) {
 
-        //System.out.println(jsonProduct);
         Cart cart = cartRepository.findCartByClient_Id((long)1);
 
         Product product= new Product(
@@ -71,11 +70,8 @@ public class ProductController {
     @GetMapping(value = "/productList/file/{id}")
     public String getFile(@PathVariable("id") Long id){
         Product product =productRepository.findById(id).orElse(null);
-
         assert product != null;
-        //System.out.println(product.getProductImage());
         return product.getProductImage();
-
     }
 
 
@@ -91,5 +87,25 @@ public class ProductController {
         productRepository.save(product);
     }
 
+
+    @GetMapping(value = "/changecart/{idProduct}/{idUser}")
+    public void changeCart(@PathVariable("idProduct") Long idProduct,@PathVariable("idUser") Long idUser){
+        Product p = productRepository.findById(idProduct).orElse(null);
+        Cart cart = cartRepository.findCartByClient_Id(idUser);
+        assert p != null;
+        Product product1 =new Product(p.getTitle(),p.getProductImage(),p.getPrice(),p.getCompany(),p.getInfo(),p.getCategory(),cart);
+        product1.setInCart(true);
+        product1.setCount(product1.getCount()+1);
+        product1.setTotal(product1.getPrice()*product1.getCount());
+        productRepository.save(product1);
+    }
+
+
+    @DeleteMapping(value = "/deleteProduct/{id}")
+    public void  deleteProduct(@PathVariable("id") Long id){
+        Product product = productRepository.findById(id).orElse(null);
+        assert product != null;
+        productRepository.delete(product);
+    }
 
 }

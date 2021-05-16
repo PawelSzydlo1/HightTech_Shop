@@ -1,6 +1,8 @@
 package com.example.hightech.controllers;
 
+import com.example.hightech.models.Cart;
 import com.example.hightech.models.User;
+import com.example.hightech.repository.CartRepository;
 import com.example.hightech.repository.UserRepository;
 import com.example.hightech.security.JsonWebTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/api")
 public class UserController {
-
+    private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final JsonWebTokenProvider jsonWebTokenProvider;
 
 
     @Autowired
-    public UserController(UserRepository userRepository, JsonWebTokenProvider jsonWebTokenProvider) {
+    public UserController(CartRepository cartRepository, UserRepository userRepository, JsonWebTokenProvider jsonWebTokenProvider) {
+        this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.jsonWebTokenProvider = jsonWebTokenProvider;
     }
@@ -48,7 +51,11 @@ public class UserController {
         String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
         user.setPassword(hashedPassword);
         user.setSalt(salt);
+        user.setRole("USER");
         userRepository.save(user);
+
+        Cart cart = new Cart(0.0,user);
+        cartRepository.save(cart);
     }
 
     @PostMapping(value = "/login")
@@ -81,11 +88,12 @@ public class UserController {
 
     @GetMapping("/useradd")
     public void adaUser() {
-        User user = new User("Pawel","Szydlo","psz0587@gmail.com","aaaaaaaa");
+        User user = new User("Pawel","Szydlo","pawel@szydlo.com","aaaaaaaa");
         String salt = BCrypt.gensalt();
         String hashedPassword = BCrypt.hashpw(user.getPassword(), salt);
         user.setPassword(hashedPassword);
         user.setSalt(salt);
+        user.setRole("ADMIN");
         userRepository.save(user);
     }
 

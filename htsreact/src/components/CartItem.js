@@ -6,23 +6,23 @@ const api = axios.create({
     baseURL: `http://localhost:8080/api/`
 })
 
-export default function CartItem({product}) {
+export default function CartItem({product,deleteItem}) {
 
     const {id, title, productImage, price, total, count} = product;
 
     const [number, setNumber] = useState(0);
     const [countProduct, setCountProduct]=useState(count);
     const [totalProduct, setTotalProduct]=useState(total);
+
     useEffect(() => {
 
 
         if ((count + number) >= 0 && (countProduct +number) >=0 && ((number === 1) || (number === (-1))) ) {
             api.get("changecount/" + id.toString() + "/" + number.toString())
-
             setCountProduct(countProduct+number);
             setTotalProduct((countProduct+number)*price)
             setNumber(0)
-            // console.log("ile ma number " + number)
+
         }
         else{
             setNumber(0)
@@ -71,7 +71,7 @@ export default function CartItem({product}) {
                 </div>
             </div>
             <div className="col-10 mx-auto col-lg-2 align-items-center justify-content-center d-flex">
-                <div className=" cart-icon" onClick={() => {//usuwanie itemów
+                <div className=" cart-icon" onClick={() => {deleteItem(id)
                 }}
                 >
                     <i className="fas fa-trash"/>

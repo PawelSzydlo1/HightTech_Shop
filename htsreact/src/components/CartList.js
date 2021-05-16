@@ -1,44 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import CartItem from "./CartItem";
-import axios from "axios";
 
-
-
-const api = axios.create({
-    baseURL: `http://localhost:8080/api/productList/`
-})
-
-export default function CartList({cart}){
-    const [products, setProducts]=useState([]);
-    const [status, setStatus]=useState(false);
-    useEffect(() => {
-        api.get('/')
-            .then(response => {
-                Promise.all(response.data.map(num =>
-                    api.get('file/' + num.id)
-                        .then(resp => resp.data)
-                        .then(data => {
-                            return {num, data};
-                        }))
-                ).then(v => {
-                        v.map(k => k.num.productImage = k.data)
-
-                        setProducts(response.data);
-                        setStatus(true);
-                    }
-                );
-            })
-
-    }, []);
-
-
-
+export default function CartList({products,status,deleteItem}){
 
     return (
         <div className="container-fluid ">
             {(status) ? (
                 products.map(product => (
-                        <CartItem key={product.id} product={product} cart={cart}/>
+                        <CartItem key={product.id} product={product} deleteItem={deleteItem}/>
                     ))
             ):(
                 <div className="spinner-border" role="status"/>
