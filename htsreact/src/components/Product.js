@@ -4,14 +4,21 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/api/`
+    baseURL: `http://localhost:8080/api/product/`
 })
 export default function Product({product, detailsFunction}) {
         const auth = useSelector(state => state.auth)
         const {id,  title, productImage, price, inCart}=product;
+
+
+    const config = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    };
         const addToCart = () => {
             console.log("add to cart");
-        api.get("/changecart/"+id.toString()+"/"+auth.user.first.toString());
+        api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
 
 
 

@@ -5,12 +5,14 @@ import Filter from "../components/Filter";
 import Details from "../components/Details";
 import styled from "styled-components";
 
-
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/api/productList/`
+    baseURL: `http://localhost:8080/api/product/List/`
 })
+
 
 export default function ProductList() {
     const [status, setStatus] = useState(true);
@@ -20,7 +22,6 @@ export default function ProductList() {
     const [products, setProducts] = useState([]);
 
     const [details, setDetails] = useState([]);
-
 
     const handleClick = e => {
         //e.preventDefault();
@@ -36,11 +37,10 @@ export default function ProductList() {
         handleClick();
         setDetails(detail);
     }
-
     const [searchText, setSearchText] = useState("");
     const [searchTag, setSearchTag] = useState([]);
-
-
+    const auth = useSelector(state => state.auth)
+    const history = useHistory()
     function search(prod) {
        // const productKeys = prod[0] && Object.keys(prod[0])
         const productKeys =["price","title","info","category","company"];
@@ -54,6 +54,7 @@ export default function ProductList() {
 
 
     useEffect(() => {
+
         api.get('/')
             .then(response => {
                 Promise.all(response.data.map(num =>
@@ -71,14 +72,13 @@ export default function ProductList() {
                 );
 
             })
-
     }, []);
 
 
     return (
         <ProductListWrapper>
             {(status) ? (
-                <div className="row ">
+                <div className="row gx-0">
                     <div className="col-3 ">
 
                         <div className="container ">

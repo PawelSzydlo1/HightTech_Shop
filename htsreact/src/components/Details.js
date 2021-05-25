@@ -5,12 +5,13 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/api/`
+    baseURL: `http://localhost:8080/api/product/`
 })
 export default function Details ({details, changeStatus}) {
 
         const {title, productImage, price, inCart,company, info }=details;
     const auth = useSelector(state => state.auth)
+
     const addToCart = () => {
         console.log("add to cart");
         api.get("/changecart/" + details.id.toString() + "/" + auth.user.first.toString());

@@ -3,20 +3,32 @@ import logo from "../logo.svg";
 import styled from "styled-components";
 import {ButtonContainer} from "./Button";
 import {Link, useHistory} from "react-router-dom";
-import {useSelector,useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {signout} from "../authorization/ActionAuth";
+import jwt_decode from "jwt-decode";
+import {useEffect, useState} from "react";
 
 
 export default function NavigationBar() {
 
     const auth = useSelector(state => state.auth)
     const dispatch = useDispatch();
-    const history = useHistory()
+    const history = useHistory();
     const handleLogout = () => {
         dispatch(signout()).then(() => {
-            history.replace("/");
-        });
+            history.push("/");
+    });
     }
+   const [decode,setDecode]=useState({role: "NULL", name:"NULL"});
+    useEffect(() => {
+        if (auth.login) {
+            const token= auth.auth.second;
+            setDecode(jwt_decode(token)) ;
+
+        }
+    }, [auth.login]);
+
+
     return (
         <NavWrapper>
             <div className="navbar navbar-expand-lg">
@@ -38,18 +50,27 @@ export default function NavigationBar() {
                 <div className="collapse navbar-collapse " id="navbarNav">
 
                     <div className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <Link to="/formAdd">
-                                <a className="nav-link">
-                                    <ButtonContainer>
+                        {(decode.name!=="NULL")?(
+                            <li className="nav-item">
+                                    <a className="nav-link">
+                                        {decode.name}
+                                    </a>
+                            </li>
+                        ):null}
+                        {(decode.role === "ADMIN") ? (
+                            <li className="nav-item">
+                                <Link to="/formAdd">
+                                    <a className="nav-link">
+                                        <ButtonContainer>
                                         <span className="mr-2">
                                         <i className="fas fa-tools"/>
                                         </span>
-                                        Add Product
-                                    </ButtonContainer>
-                                </a>
-                            </Link>
-                        </li>
+                                            Add Product
+                                        </ButtonContainer>
+                                    </a>
+                                </Link>
+                            </li>
+                        ) : null}
 
                         <li className="nav-item">
                             <Link to="/service">
@@ -77,10 +98,10 @@ export default function NavigationBar() {
                             </Link>
                         </li>
 
-                        {(auth.login)?(
+                        {(auth.login) ? (
                             <li className="nav-item">
                                 <Link to="/">
-                                    <a className="nav-link"  onClick={handleLogout}>
+                                    <a className="nav-link" onClick={handleLogout}>
                                         <ButtonContainer>
                                         <span className="ml-2 mr-2">
                                             <i className="fas fa-users-cog"/>
@@ -90,7 +111,7 @@ export default function NavigationBar() {
                                     </a>
                                 </Link>
                             </li>
-                        ):(
+                        ) : (
                             <li className="nav-item">
                                 <Link to="/successfulLogin">
                                     <a className="nav-link">
@@ -104,8 +125,6 @@ export default function NavigationBar() {
                                 </Link>
                             </li>
                         )}
-
-
 
 
                     </div>

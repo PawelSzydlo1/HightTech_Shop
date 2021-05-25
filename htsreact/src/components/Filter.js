@@ -6,12 +6,13 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/api/productCategory/`
+    baseURL: `http://localhost:8080/api/product/Category/`
 })
 
 export default function Filter({setSearchText, searchTag, setSearchTag,setFilterPrice})   {
 
 const [category, setCategory]=useState([]);
+
 useEffect(()=> {
     api.get('/').then(response => response.data)
         .then(data => {

@@ -52,10 +52,14 @@ function FormAddProduct() {
 
 
     }
-
+    const config = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    };
     const sendData =()=>{
 
-        api.post("/productAdd", values).then(response => {
+        api.post("/productAdd", values,config).then(response => {
 
                 if(response.data != null){
                     setValues({
@@ -78,14 +82,7 @@ function FormAddProduct() {
                         <div className="panel panel-default ">
                             <div className="panel-heading">
                                 <h3 className="panel-title py-3">Add or Edit Product </h3>
-                                <h5 className="d-flex align-content-between justify-content-center">
-                                    <small className="py-1">Do you want to edit a product?</small>
-                                    <Link to='/'>
-                                        <ButtonContainer className="edit">
-                                            Edit
-                                        </ButtonContainer>
-                                    </Link>
-                                </h5>
+
                             </div>
                             <div className="panel-body">
                                 <form role="form" onSubmit={handleSubmit}>

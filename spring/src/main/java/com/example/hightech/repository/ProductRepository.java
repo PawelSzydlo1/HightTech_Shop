@@ -7,14 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product,Long> {
     @Transactional
     @Query(nativeQuery = true,value = "SELECT * FROM products WHERE cart_id =(SELECT id FROM carts WHERE client_id = (SELECT id FROM users WHERE role = 'ADMIN'))")
     List<Product> getProductsByClient_Role();
-    @Transactional
+   @Transactional
     @Query(nativeQuery = true,value = "SELECT * FROM products WHERE cart_id =(SELECT id FROM carts WHERE client_id =?1)")
     List<Product> getProductsByCart_Client_Id(Long id);
 

@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/product")
 public class ProductController {
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
@@ -26,27 +25,27 @@ public class ProductController {
 
     }
 
-    @GetMapping("/productList")
+    @GetMapping("/List")
     public List<Product> runProductRepository(){
 
         return productRepository.getProductsByClient_Role();
     }
 
 
-    @GetMapping("/productList/{id}")
+    @GetMapping("/List/{id}")
     public List<Product> getCartById(@PathVariable("id") Long id){
         return productRepository.getProductsByCart_Client_Id(id);
 
     }
 
-    @GetMapping("/productCategory")
+    @GetMapping("/Category")
     public List<String> getProductsCategory(){
         return productRepository.getAllCategory();
     }
 
 
 
-    @PostMapping("/productAdd")
+    @PostMapping("/Add")
     public void addProduct(@RequestBody JsonNode jsonProduct) {
 
         Cart cart = cartRepository.findCartByClient_Id((long)1);
@@ -67,7 +66,7 @@ public class ProductController {
     }
 
 
-    @GetMapping(value = "/productList/file/{id}")
+    @GetMapping(value = "/List/file/{id}")
     public String getFile(@PathVariable("id") Long id){
         Product product =productRepository.findById(id).orElse(null);
         assert product != null;
@@ -101,7 +100,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping(value = "/deleteProduct/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void  deleteProduct(@PathVariable("id") Long id){
         Product product = productRepository.findById(id).orElse(null);
         assert product != null;

@@ -3,10 +3,10 @@ import {useEffect, useState} from "react";
 import styled from "styled-components";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/api/`
+    baseURL: `http://localhost:8080/api/product/`
 })
 
-export default function CartItem({product,deleteItem}) {
+export default function CartItem({product,deleteItem,functionChange}) {
 
     const {id, title, productImage, price, total, count} = product;
 
@@ -14,15 +14,25 @@ export default function CartItem({product,deleteItem}) {
     const [countProduct, setCountProduct]=useState(count);
     const [totalProduct, setTotalProduct]=useState(total);
 
-    useEffect(() => {
 
+
+        useEffect(() => {
+            const config = {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                }
+            };
 
         if ((count + number) >= 0 && (countProduct +number) >=0 && ((number === 1) || (number === (-1))) ) {
-            api.get("changecount/" + id.toString() + "/" + number.toString())
-            setCountProduct(countProduct+number);
-            setTotalProduct((countProduct+number)*price)
-            setNumber(0)
+            console.log(config);
+            api.get("changecount/" + id.toString() + "/" + number.toString(), config)
+                .then(r =>{
+                setCountProduct(countProduct+number);
+                setTotalProduct((countProduct+number)*price);
+                functionChange();
 
+                setNumber(0);
+            })
         }
         else{
             setNumber(0)
