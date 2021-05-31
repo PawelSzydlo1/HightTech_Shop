@@ -59,7 +59,7 @@ function FormAddProduct() {
     };
     const sendData =()=>{
 
-        api.post("/productAdd", values,config).then(response => {
+        api.post("/product/Add", values,config).then(response => {
 
                 if(response.data != null){
                     setValues({

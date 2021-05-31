@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 const api = axios.create({
     baseURL: `http://localhost:8080/api/product/`
@@ -9,7 +10,7 @@ const api = axios.create({
 export default function Product({product, detailsFunction}) {
         const auth = useSelector(state => state.auth)
         const {id,  title, productImage, price, inCart}=product;
-
+        const history = useHistory()
 
     const config = {
         headers: {
@@ -17,11 +18,14 @@ export default function Product({product, detailsFunction}) {
         }
     };
         const addToCart = () => {
-            console.log("add to cart");
-        api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
-
-
-
+            if(auth.login){
+                console.log("add to cart");
+                api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+            }
+            else{
+                history.push("/successfulLogin");
+                console.log("zaloguj sie")
+            }
         }
         return (
             <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
@@ -74,6 +78,12 @@ const ProductWrapper = styled.div`
   .img-container {
     position: relative;
     overflow: hidden;
+    height:100%;
+    width: 100%;
+  }
+  .img-container >img {
+    height:100%;
+    width: 100%;
   }
 
   .cart-img-top {

@@ -7,6 +7,7 @@ import {useSelector, useDispatch} from "react-redux";
 import {signout} from "../authorization/ActionAuth";
 import jwt_decode from "jwt-decode";
 import {useEffect, useState} from "react";
+import Notification from "./Notification";
 
 
 export default function NavigationBar() {
@@ -130,7 +131,10 @@ export default function NavigationBar() {
                     </div>
                 </div>
             </div>
+
+            <Notification />
         </NavWrapper>
+
     );
 }
 

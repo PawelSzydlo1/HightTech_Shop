@@ -13,8 +13,14 @@ export default function Details ({details, changeStatus}) {
     const auth = useSelector(state => state.auth)
 
     const addToCart = () => {
-        console.log("add to cart");
-        api.get("/changecart/" + details.id.toString() + "/" + auth.user.first.toString());
+        if(auth.login){
+            console.log("add to cart");
+            api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+        }
+        else{
+            history.push("/successfulLogin");
+            console.log("zaloguj sie")
+        }
     }
 
         return (

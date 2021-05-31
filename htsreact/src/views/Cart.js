@@ -13,7 +13,7 @@ const api = axios.create({
 })
 export default function Cart() {
     const [status, setStatus]=useState(false);
-    const history = useHistory()
+    const history = useHistory();
     const auth = useSelector(state => state.auth)
     const [products, setProducts]=useState([]);
     const [deleteDetect, setDeleteDetect]=useState(false)
