@@ -1,62 +1,56 @@
-import React, {Component} from "react";
+
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import axios from "axios";
+import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 
-import PropTypes from "prop-types";
+const api = axios.create({
+    baseURL: `http://localhost:8080/api/product/`
+})
+export default function Product({product, detailsFunction}) {
+        const auth = useSelector(state => state.auth)
+        const {id,  title, productImage, price, inCart}=product;
+        const history = useHistory()
 
-export default class Product extends Component {
-    render() {
-
-        const {id, title, imgName, price, inCart} = this.props.product;
+    const config = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    };
+        const addToCart = () => {
+            if(auth.login){
+                console.log("add to cart");
+                api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+            }
+            else{
+                history.push("/successfulLogin");
+                console.log("zaloguj sie")
+            }
+        }
         return (
-            <ProductWrapper className="col-12 mx-auto col-md-4 col-lg-3 my-3">
+            <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
                 <div className="card">
                     <div
-                        className="img-container p-5"
-                        onClick={() => console.log("you clicked me on the image container")}>
-                        <div>
-                            <Link to="/details" key={id}>
-                                <img src={imgName} alt="product" className="card-img-top"/>
-                            </Link>
+                        className="img-container p-5">
+
+                        <div onClick={() => detailsFunction(product)}>
+                                <img src={productImage} alt="product" className="card-img-top"  />
                         </div>
-                        <button
-                            className="cart-btn"
-                            disabled={inCart}
-                        >
-                            {inCart ? (
-                                <p className="text-capitalize mb-0 " disabled>
-                                    {" "}
-                                    in cart
-                                </p>
-                            ) : (
-                                <i className="fas fa-cart-plus"/>
-                            )}
+                        <button className="cart-btn" disabled={inCart} onClick={addToCart}>
+                          <i className="fas fa-cart-plus"/>
                         </button>
                     </div>
-                    {/* card footer*/}
                     <div className="card-footer d-flex justify-content-between">
                         <p className="align-self-center mb-0">{title}</p>
                         <h5 className=" text-blue font-italic mb-0">
                             <span className="mr-1">$</span>
                             {price}
                         </h5>
-
-
                     </div>
                 </div>
             </ProductWrapper>
         );
-    }
 }
-Product.propTypes = {
-    product: PropTypes.shape({
-        id: PropTypes.number,
-        imgName: PropTypes.string,
-        title: PropTypes.string,
-        price: PropTypes.number,
-        inCart: PropTypes.bool,
-    }).isRequired,
-};
 
 const ProductWrapper = styled.div`
   .card {
@@ -84,6 +78,12 @@ const ProductWrapper = styled.div`
   .img-container {
     position: relative;
     overflow: hidden;
+    height:100%;
+    width: 100%;
+  }
+  .img-container >img {
+    height:100%;
+    width: 100%;
   }
 
   .cart-img-top {

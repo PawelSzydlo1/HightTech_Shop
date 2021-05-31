@@ -1,61 +1,117 @@
-import React, {Component} from "react";
+import React, {useEffect, useState} from "react";
 import Product from "../components/Product";
 import Title from "../components/Title";
 import Filter from "../components/Filter";
-
+import Details from "../components/Details";
 import styled from "styled-components";
 
-
 import axios from "axios";
-
+import {useSelector} from "react-redux";
+import {useHistory} from "react-router-dom";
 
 const api = axios.create({
-    baseURL: `http://localhost:8080/productList/`
+    baseURL: `http://localhost:8080/api/product/List/`
 })
 
-export default class ProductList extends Component {
-    state = {
-        carts: []
+
+export default function ProductList() {
+    const [status, setStatus] = useState(true);
+    const [statusDownload, setStatusDownload] = useState(false);
+    const [filterPrice, setFilterPrice] = useState([0, 20000]);
+
+    const [products, setProducts] = useState([]);
+
+    const [details, setDetails] = useState([]);
+
+    const handleClick = e => {
+        //e.preventDefault();
+
+        setStatus(false);
     }
 
-    constructor() {
-        super();
-        api.get('/').then(response => response.data)
-            .then((data) => {
-                this.setState({carts: data})
+    function changeStatus() {
+        setStatus(true);
+    }
+
+    const detailsFunction = (detail) => {
+        handleClick();
+        setDetails(detail);
+    }
+    const [searchText, setSearchText] = useState("");
+    const [searchTag, setSearchTag] = useState([]);
+    const auth = useSelector(state => state.auth)
+    const history = useHistory()
+    function search(prod) {
+       // const productKeys = prod[0] && Object.keys(prod[0])
+        const productKeys =["price","title","info","category","company"];
+        let filtr1 = prod.filter((product) =>
+            productKeys.some((key) => product[key].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1));
+        let filtr2 = filtr1.filter((product) => product["category"].toString().toLowerCase().indexOf(searchTag.toString().toLowerCase()) > -1);
+
+        return filtr2.filter((product) =>
+            product["price"] > filterPrice[0] && product["price"] <= filterPrice[1]);
+    }
+
+
+    useEffect(() => {
+
+        api.get('/')
+            .then(response => {
+                Promise.all(response.data.map(num =>
+                    api.get('/file/' + num.id)
+                        .then(resp => resp.data)
+                        .then(data => {
+                            return {num, data};
+                        }))
+                ).then(v => {
+                        v.map(k => k.num.productImage = k.data)
+
+                        setProducts(response.data);
+                        setStatusDownload(true);
+                    }
+                );
+
             })
-    }
+    }, []);
 
 
-    render() {
-        return (
-            <React.Fragment>
-                <div className="row ">
+    return (
+        <ProductListWrapper>
+            {(status) ? (
+                <div className="row gx-0">
                     <div className="col-3 ">
 
                         <div className="container ">
-                            <Filter/>
+                            <Filter setSearchText={setSearchText} searchTag={searchTag} setSearchTag={setSearchTag}
+                                    setFilterPrice={setFilterPrice}/>
                         </div>
                     </div>
-
-
                     <div className="col-9">
                         <div className="container">
                             <Title name="our" title="products"/>
+
                             <div className="row">
-
-                                    {this.state.carts.map(cart => (
-                                        <Product key={cart.id } product={cart}>
-                                        </Product>
-
+                                {statusDownload ? (
+                                    search(products).map(product => (
+                                        <Product product={product}
+                                                 detailsFunction={detailsFunction}/>
                                     ))
-                                    }
-
+                                ) : (
+                                    <div className="spinner-border" role="status"/>
+                                )}
                             </div>
                         </div>
                     </div>
                 </div>
-            </React.Fragment>
-        );
-    }
-}
+
+            ) : (
+                <Details details={details} changeStatus={changeStatus}/>
+
+            )}
+        </ProductListWrapper>
+    );
+};
+
+const ProductListWrapper = styled.div`
+
+`

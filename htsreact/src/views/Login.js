@@ -1,29 +1,25 @@
 import React, {useState} from 'react';
 import styled from "styled-components";
-import axios from 'axios'
 import {ButtonContainer} from "../components/Button";
 import {Link} from "react-router-dom";
+import {signin} from "../authorization/ActionAuth.js"
+import {useDispatch, useSelector} from "react-redux";
 
 
-const api = axios.create({
-    baseURL: `http://localhost:8080`
-})
-
-
-function Login({CheckLogin, error}) {
+function Login() {
+    const dispatch = useDispatch();
+    const [error, setError]=useState("")
+    const auth = useSelector(state => state.auth)
 
     const [data, setData] = useState({email: "", password: ""});
-    const res = async () => {
-        const resp = await api.post("http://localhost:8080/login", data);
-        CheckLogin(resp.data);
-    }
-
     const submitFunction = e => {
         e.preventDefault();
-
-        res();
-
+        dispatch(signin(data));
+        if(!auth.register_error){
+            setError("Wrong email or password");
+        }
     }
+
 
     return (
         <LoginWrapper>
@@ -52,7 +48,6 @@ function Login({CheckLogin, error}) {
                                             autoComplete="off"
                                         />
                                     </div>
-
                                     <div className="col">
                                         <div className="row-col-xs-6 row-col-sm-6 row-col-md-6 row-col-ld-8 pt-3 pb-3">
                                             <div className="form-group">
@@ -66,7 +61,6 @@ function Login({CheckLogin, error}) {
                                                     placeholder="Password"
                                                     required
                                                     autoComplete="off"
-
                                                 />
                                             </div>
                                         </div>
@@ -76,12 +70,8 @@ function Login({CheckLogin, error}) {
                                             Login
                                         </ButtonContainer>
                                     </div>
-
-
                                 </form>
-
                             </div>
-
                             <div className="panel-footer ">
                                 <div className="row d-flex align-content-around justify-content-start p-3">
                                     <h5 className="row ">You don't have an account? </h5>
@@ -92,10 +82,7 @@ function Login({CheckLogin, error}) {
                                             </ButtonContainer>
                                         </Link>
                                     </div>
-
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -110,7 +97,6 @@ export default Login;
 
 const LoginWrapper = styled.div`
   input {
-    text-transform: capitalize;
     font-size: larger;
     background: transparent;
     border-radius: 0.5rem;

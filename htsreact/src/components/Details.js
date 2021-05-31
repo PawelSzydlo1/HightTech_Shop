@@ -1,64 +1,71 @@
-import React, {Component} from "react";
 
-import {Link} from "react-router-dom";
 import {ButtonContainer} from "./Button";
+import React from "react";
+import axios from "axios";
+import {useSelector} from "react-redux";
 
-export default class Details extends Component {
-    title = "Title";
-    imgName = "img/product-1.png";
-    price = 11;
-    inCart = false;
-    company = "samsung";
-    info = "description";
+const api = axios.create({
+    baseURL: `http://localhost:8080/api/product/`
+})
+export default function Details ({details, changeStatus}) {
 
-    render() {
+        const {title, productImage, price, inCart,company, info }=details;
+    const auth = useSelector(state => state.auth)
+
+    const addToCart = () => {
+        if(auth.login){
+            console.log("add to cart");
+            api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+        }
+        else{
+            history.push("/successfulLogin");
+            console.log("zaloguj sie")
+        }
+    }
+
         return (
             <div className="container py-5">
-                {/*title*/}
+
                 <div className="row">
                     <div className="col-10 mx-auto text-center text-slanted text-blue my-5">
-                        <h1>{this.title}</h1>
+                        <h1>{title}</h1>
                     </div>
                 </div>
 
-                {/*end title */}
-                {/* product info */}
+
                 <div className="row">
                     <div className="col-10 mx-auto col-md-6 my-3">
-                        <img src={this.imgName} className="img-fluid" alt="product"/>
+                        <img src={productImage} className="img-fluid" alt="product"/>
                     </div>
 
-                    {/*product text */}
 
                     <div className="col-10 mx-auto col-md-6 my-3
                 text-capitalize">
-                        <h2>model: {this.title}</h2>
+                        <h2>model: {title}</h2>
                         <h4 className="text-title text-uppercase text-muted mt-3 mb-2">
-                            made by: <span className="text-uppercase">{this.company}</span>
+                            made by: <span className="text-uppercase">{company}</span>
                         </h4>
                         <h4 className="text-blue">
                             <strong>
                                 price: <span>$</span>
-                                {this.price}
+                                {price}
                             </strong>
                         </h4>
                         <p className="text-capitalize font-weight-bold mt-3 mb-0">
                             some info about product:
                         </p>
-                        <p className=" text-muted lead">{this.info}</p>
+                        <p className=" text-muted lead">{info}</p>
 
-                        {/*buttons */}
-                        <Link to="/">
-                            <ButtonContainer>
+
+                            <ButtonContainer onClick={changeStatus}>
                                 back to products
                             </ButtonContainer>
-                        </Link>
                         <ButtonContainer
                             cart
-                            disable={this.inCart}
+                            disable={inCart}
+                            onClick={()=>addToCart()}
                         >
-
-                            {this.inCart ? "inCart" : "add to cart"}
+                            add to cart
                         </ButtonContainer>
 
                     </div>
@@ -67,5 +74,5 @@ export default class Details extends Component {
 
         );
 
-    }
+
 }

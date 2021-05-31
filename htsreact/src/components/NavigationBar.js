@@ -1,35 +1,80 @@
-import React, {Component} from "react";
 import logo from "../logo.svg";
 
 import styled from "styled-components";
 import {ButtonContainer} from "./Button";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
+import {signout} from "../authorization/ActionAuth";
+import jwt_decode from "jwt-decode";
+import {useEffect, useState} from "react";
+import Notification from "./Notification";
 
 
-export default class NavigationBar extends Component {
-    render() {
-        return (
-            <NavWrapper>
-                <div className="navbar navbar-expand-lg">
-                    <Link to="/">
+export default function NavigationBar() {
+
+    const auth = useSelector(state => state.auth)
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const handleLogout = () => {
+        dispatch(signout()).then(() => {
+            history.push("/");
+    });
+    }
+   const [decode,setDecode]=useState({role: "NULL", name:"NULL"});
+    useEffect(() => {
+        if (auth.login) {
+            const token= auth.auth.second;
+            setDecode(jwt_decode(token)) ;
+
+        }
+    }, [auth.login]);
+
+
+    return (
+        <NavWrapper>
+            <div className="navbar navbar-expand-lg">
+                <Link to="/">
                     <a className="navbar-brand">
-                        <img src={logo}/>
+                        <img src={logo} alt="image"/>
 
                     </a>
-                    </Link>
-                    <Link to="/">
+                </Link>
+                <Link to="/">
                     <a className="navbar-brand">
                         HighTech Shop
                     </a>
-                    </Link>
-                    <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggle-icon"/>
-                    </div>
-                    <div className="collapse navbar-collapse " id="navbarNav">
-                        <div className="navbar-nav ml-auto">
+                </Link>
+                <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggle-icon"/>
+                </div>
+                <div className="collapse navbar-collapse " id="navbarNav">
+
+                    <div className="navbar-nav ml-auto">
+                        {(decode.name!=="NULL")?(
                             <li className="nav-item">
-                                <Link to="/service">
+                                    <a className="nav-link">
+                                        {decode.name}
+                                    </a>
+                            </li>
+                        ):null}
+                        {(decode.role === "ADMIN") ? (
+                            <li className="nav-item">
+                                <Link to="/formAdd">
+                                    <a className="nav-link">
+                                        <ButtonContainer>
+                                        <span className="mr-2">
+                                        <i className="fas fa-tools"/>
+                                        </span>
+                                            Add Product
+                                        </ButtonContainer>
+                                    </a>
+                                </Link>
+                            </li>
+                        ) : null}
+
+                        <li className="nav-item">
+                            <Link to="/service">
                                 <a className="nav-link">
                                     <ButtonContainer>
                                         <span className="mr-2">
@@ -38,11 +83,11 @@ export default class NavigationBar extends Component {
                                         Service
                                     </ButtonContainer>
                                 </a>
-                                </Link>
-                            </li>
+                            </Link>
+                        </li>
 
-                            <li className="nav-item">
-                                <Link to="/cart">
+                        <li className="nav-item">
+                            <Link to="/cart">
                                 <a className="nav-link">
                                     <ButtonContainer>
                                         <span className="mr-2">
@@ -52,25 +97,45 @@ export default class NavigationBar extends Component {
                                     </ButtonContainer>
                                 </a>
                             </Link>
-                            </li>
+                        </li>
+
+                        {(auth.login) ? (
                             <li className="nav-item">
-                                <Link to="/successfulLogin">
-                                <a className="nav-link">
-                                    <ButtonContainer>
+                                <Link to="/">
+                                    <a className="nav-link" onClick={handleLogout}>
+                                        <ButtonContainer>
                                         <span className="ml-2 mr-2">
                                             <i className="fas fa-users-cog"/>
                                         </span>
-                                        Login
-                                    </ButtonContainer>
-                                </a>
+                                            Logout
+                                        </ButtonContainer>
+                                    </a>
                                 </Link>
                             </li>
-                        </div>
+                        ) : (
+                            <li className="nav-item">
+                                <Link to="/successfulLogin">
+                                    <a className="nav-link">
+                                        <ButtonContainer>
+                                        <span className="ml-2 mr-2">
+                                            <i className="fas fa-users-cog"/>
+                                        </span>
+                                            Login
+                                        </ButtonContainer>
+                                    </a>
+                                </Link>
+                            </li>
+                        )}
+
+
                     </div>
                 </div>
-            </NavWrapper>
-        );
-    }
+            </div>
+
+            <Notification />
+        </NavWrapper>
+
+    );
 }
 
 const NavWrapper = styled.div`
@@ -83,10 +148,12 @@ const NavWrapper = styled.div`
     text-transform: capitalize;
     padding: 0.4rem 1rem;
   }
-  a{
-  text-decoration: none;
+
+  a {
+    text-decoration: none;
   }
-  img{
+
+  img {
     width: 3rem;
   }
 `;
