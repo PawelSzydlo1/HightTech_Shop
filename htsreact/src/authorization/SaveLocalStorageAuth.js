@@ -1,4 +1,4 @@
-const token = !(localStorage.getItem('token')===null);
+const token = localStorage.getItem('token');
 
 
 const initialState = token ? {

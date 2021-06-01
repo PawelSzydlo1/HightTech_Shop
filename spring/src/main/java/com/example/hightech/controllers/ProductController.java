@@ -90,6 +90,7 @@ public class ProductController {
     @GetMapping(value = "/changecart/{idProduct}/{idUser}")
     public void changeCart(@PathVariable("idProduct") Long idProduct,@PathVariable("idUser") Long idUser){
         Product p = productRepository.findById(idProduct).orElse(null);
+       
         Cart cart = cartRepository.findCartByClient_Id(idUser);
         assert p != null;
         Product product1 =new Product(p.getTitle(),p.getProductImage(),p.getPrice(),p.getCompany(),p.getInfo(),p.getCategory(),cart);
@@ -101,10 +102,21 @@ public class ProductController {
 
 
     @DeleteMapping(value = "/delete/{id}")
-    public void  deleteProduct(@PathVariable("id") Long id){
+    public String  deleteProduct(@PathVariable("id") Long id){
         Product product = productRepository.findById(id).orElse(null);
         assert product != null;
         productRepository.delete(product);
+        return "Delete";
+    }
+
+
+    @DeleteMapping(value = "/deleteAll/{id}")
+    public String  deleteProductAll(@PathVariable("id") Long id){
+        System.out.println("Usunołem");
+       List<Product> products = productRepository.getProductsByCart_Client_Id(id);
+       productRepository.deleteAll(products);
+
+        return "Delete";
     }
 
 }

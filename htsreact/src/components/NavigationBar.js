@@ -11,27 +11,34 @@ import Notification from "./Notification";
 
 
 export default function NavigationBar() {
-
+    const [statusLogout, setStatusLogout]=useState(false);
     const auth = useSelector(state => state.auth)
     const dispatch = useDispatch();
     const history = useHistory();
     const handleLogout = () => {
         dispatch(signout()).then(() => {
             history.push("/");
-    });
+        });
+        setDecode({role: "NULL", name: "NULL"});
+        setStatusLogout(true);
+
+
     }
-   const [decode,setDecode]=useState({role: "NULL", name:"NULL"});
+    const [decode, setDecode] = useState({role: "NULL", name: "NULL"});
     useEffect(() => {
-        if (auth.login) {
-            const token= auth.auth.second;
-            setDecode(jwt_decode(token)) ;
+        if (localStorage.getItem('token')!==null) {
+            setStatusLogout(true)
+            const token = localStorage.getItem('token');
+            setDecode(jwt_decode(token));
 
         }
-    }, [auth.login]);
+    }, [localStorage.getItem('token'),statusLogout]);
 
 
     return (
         <NavWrapper>
+
+
             <div className="navbar navbar-expand-lg">
                 <Link to="/">
                     <a className="navbar-brand">
@@ -51,13 +58,13 @@ export default function NavigationBar() {
                 <div className="collapse navbar-collapse " id="navbarNav">
 
                     <div className="navbar-nav ml-auto">
-                        {(decode.name!=="NULL")?(
+                        {(decode.name !== "NULL") ? (
                             <li className="nav-item">
-                                    <a className="nav-link">
-                                        {decode.name}
-                                    </a>
+                                <a className="nav-link">
+                                    {decode.name}
+                                </a>
                             </li>
-                        ):null}
+                        ) : null}
                         {(decode.role === "ADMIN") ? (
                             <li className="nav-item">
                                 <Link to="/formAdd">
@@ -99,7 +106,7 @@ export default function NavigationBar() {
                             </Link>
                         </li>
 
-                        {(auth.login) ? (
+                        {(localStorage.getItem('token')!==null) ? (
                             <li className="nav-item">
                                 <Link to="/">
                                     <a className="nav-link" onClick={handleLogout}>
@@ -132,7 +139,10 @@ export default function NavigationBar() {
                 </div>
             </div>
 
-            <Notification />
+            <Notification/>
+
+
+
         </NavWrapper>
 
     );

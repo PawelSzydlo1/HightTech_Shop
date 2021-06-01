@@ -39,10 +39,9 @@ export default function ProductList() {
     }
     const [searchText, setSearchText] = useState("");
     const [searchTag, setSearchTag] = useState([]);
-    const auth = useSelector(state => state.auth)
-    const history = useHistory()
+
     function search(prod) {
-       // const productKeys = prod[0] && Object.keys(prod[0])
+
         const productKeys =["price","title","info","category","company"];
         let filtr1 = prod.filter((product) =>
             productKeys.some((key) => product[key].toString().toLowerCase().indexOf(searchText.toLowerCase()) > -1));
@@ -93,7 +92,7 @@ export default function ProductList() {
                             <div className="row">
                                 {statusDownload ? (
                                     search(products).map(product => (
-                                        <Product product={product}
+                                        <Product key={product.id} product={product}
                                                  detailsFunction={detailsFunction}/>
                                     ))
                                 ) : (

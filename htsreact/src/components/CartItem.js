@@ -1,12 +1,13 @@
 import axios from "axios";
 import {useEffect, useState} from "react";
 import styled from "styled-components";
+import ModalAllert from "./ModalAllert";
 
 const api = axios.create({
     baseURL: `http://localhost:8080/api/product/`
 })
 
-export default function CartItem({product,deleteItem,functionChange}) {
+export default function CartItem({product,deleteItem,functionChange,changeCountAndTotal}) {
 
     const {id, title, productImage, price, total, count} = product;
 
@@ -24,13 +25,13 @@ export default function CartItem({product,deleteItem,functionChange}) {
             };
 
         if ((count + number) >= 0 && (countProduct +number) >=0 && ((number === 1) || (number === (-1))) ) {
-            console.log(config);
+
             api.get("changecount/" + id.toString() + "/" + number.toString(), config)
                 .then(r =>{
                 setCountProduct(countProduct+number);
                 setTotalProduct((countProduct+number)*price);
+                changeCountAndTotal(id, countProduct+number,(countProduct+number)*price);
                 functionChange();
-
                 setNumber(0);
             })
         }
@@ -40,9 +41,20 @@ export default function CartItem({product,deleteItem,functionChange}) {
 
     }, [number])
 
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
 
         <CartItemWrapper key={id} className="row my-1 text-capitalize text-center">
+            <ModalAllert open={open} handleClose={handleClose} info={"Usunąłeś produkt z koszyka"}/>
             <div className="col-10 mx-auto col-lg-2 align-items-center justify-content-center d-flex">
                 <img
                     src={productImage}
@@ -81,7 +93,7 @@ export default function CartItem({product,deleteItem,functionChange}) {
                 </div>
             </div>
             <div className="col-10 mx-auto col-lg-2 align-items-center justify-content-center d-flex">
-                <div className=" cart-icon" onClick={() => {deleteItem(id)
+                <div className=" cart-icon" onClick={() => {deleteItem(id); handleOpen();
                 }}
                 >
                     <i className="fas fa-trash"/>
