@@ -34,13 +34,13 @@ export default function Cart() {
             "Authorization": "Bearer " + localStorage.getItem('token')
         }
     };
-    const deleteItem =(id) =>{
-        api.delete("delete/" + id,config).then(r  =>{
+    const deleteItem =async (id) =>{
+        await api.delete("delete/" + id,config).then(r  =>{
             if(deleteDetect){
-                setDeleteDetect(false)
+                setTimeout(()=>setDeleteDetect(false),2000)
             }
             else {
-                setDeleteDetect(true)
+                setTimeout(()=>setDeleteDetect(true),2000);
             }
         });
 
@@ -52,9 +52,9 @@ export default function Cart() {
         if (!auth.login) {
             history.push("/successfulLogin");
         }else{
-            api.get('List/'+auth.auth.first.toString())
+            api.get('List/'+localStorage.getItem('id'))
                 .then(response => {
-                    console.log(response.data);
+
                     Promise.all(response.data.map(num =>
                         api.get('List/file/' + num.id)
                             .then(resp => resp.data)
@@ -65,14 +65,22 @@ export default function Cart() {
                             v.map(k => k.num.productImage = k.data)
                             setProducts(response.data);
                             setStatus(true);
-
-
                     }
 
                     );
                 })
         }
     }, [deleteDetect]);
+
+
+    const changeCountAndTotal = (id, count, total) =>{
+        const tmp = products.find((prod)=>prod.id===id);
+        const ind = products.findIndex((prod)=>prod.id===id)
+        tmp.count=count;
+        tmp.total=total;
+        products[ind]=tmp;
+    }
+
 
     return (
         <div>
@@ -81,8 +89,8 @@ export default function Cart() {
                 <div>
                     <Title name="your" title="cart"/>
                     <CartColumns/>
-                    <CartList products={products} status={status} deleteItem={deleteItem} functionChange={functionChange}/>
-                    <CartTotals products={products} changeNumber={changeNumber}/>
+                    <CartList products={products} status={status} deleteItem={deleteItem} functionChange={functionChange} changeCountAndTotal={changeCountAndTotal}/>
+                    <CartTotals products={products} changeNumber={changeNumber} deleteDetect={deleteDetect}/>
                 </div>
             ) : (
                 <EmptyCart/>

@@ -8,11 +8,10 @@ import {signout} from "../authorization/ActionAuth";
 import jwt_decode from "jwt-decode";
 import {useEffect, useState} from "react";
 import Notification from "./Notification";
-import ModalAllert from "./ModalAllert";
 
 
 export default function NavigationBar() {
-
+    const [statusLogout, setStatusLogout]=useState(false);
     const auth = useSelector(state => state.auth)
     const dispatch = useDispatch();
     const history = useHistory();
@@ -20,15 +19,20 @@ export default function NavigationBar() {
         dispatch(signout()).then(() => {
             history.push("/");
         });
+        setDecode({role: "NULL", name: "NULL"});
+        setStatusLogout(true);
+
+
     }
     const [decode, setDecode] = useState({role: "NULL", name: "NULL"});
     useEffect(() => {
-        if (auth.login) {
-            const token = auth.auth.second;
+        if (localStorage.getItem('token')!==null) {
+            setStatusLogout(true)
+            const token = localStorage.getItem('token');
             setDecode(jwt_decode(token));
 
         }
-    }, [auth.login]);
+    }, [localStorage.getItem('token'),statusLogout]);
 
 
     return (
@@ -102,7 +106,7 @@ export default function NavigationBar() {
                             </Link>
                         </li>
 
-                        {(auth.login) ? (
+                        {(localStorage.getItem('token')!==null) ? (
                             <li className="nav-item">
                                 <Link to="/">
                                     <a className="nav-link" onClick={handleLogout}>
@@ -136,6 +140,9 @@ export default function NavigationBar() {
             </div>
 
             <Notification/>
+
+
+
         </NavWrapper>
 
     );

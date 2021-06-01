@@ -20,7 +20,7 @@ export default function Details ({details, changeStatus}) {
     const addToCart = () => {
         if(auth.login){
             handleOpen();
-            api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+            api.get("/changecart/"+id+"/"+localStorage.getItem('id'),config);
         }
         else{
             history.push("/successfulLogin");

@@ -20,9 +20,10 @@ export default function Product({product, detailsFunction}) {
         }
     };
         const addToCart = () => {
-            if(auth.login){
+            if(localStorage.getItem('token')!==null){
                 handleOpen();
-                api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
+
+                api.get("/changecart/"+id+"/"+localStorage.getItem('id'),config);
             }
             else{
                 history.push("/successfulLogin");

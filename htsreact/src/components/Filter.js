@@ -29,7 +29,7 @@ useEffect(()=> {
 
 
                 {category.map((cat)=>
-                <div className="form-check form-switch " key={cat}>
+                <div className="form-check form-switch " key={category.findIndex((c)=>c===cat)}>
                         <input
                             className="form-check-input"
                             type="checkbox"
