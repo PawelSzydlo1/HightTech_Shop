@@ -8,6 +8,7 @@ import {signout} from "../authorization/ActionAuth";
 import jwt_decode from "jwt-decode";
 import {useEffect, useState} from "react";
 import Notification from "./Notification";
+import ModalAllert from "./ModalAllert";
 
 
 export default function NavigationBar() {
@@ -18,13 +19,13 @@ export default function NavigationBar() {
     const handleLogout = () => {
         dispatch(signout()).then(() => {
             history.push("/");
-    });
+        });
     }
-   const [decode,setDecode]=useState({role: "NULL", name:"NULL"});
+    const [decode, setDecode] = useState({role: "NULL", name: "NULL"});
     useEffect(() => {
         if (auth.login) {
-            const token= auth.auth.second;
-            setDecode(jwt_decode(token)) ;
+            const token = auth.auth.second;
+            setDecode(jwt_decode(token));
 
         }
     }, [auth.login]);
@@ -32,6 +33,8 @@ export default function NavigationBar() {
 
     return (
         <NavWrapper>
+
+
             <div className="navbar navbar-expand-lg">
                 <Link to="/">
                     <a className="navbar-brand">
@@ -51,13 +54,13 @@ export default function NavigationBar() {
                 <div className="collapse navbar-collapse " id="navbarNav">
 
                     <div className="navbar-nav ml-auto">
-                        {(decode.name!=="NULL")?(
+                        {(decode.name !== "NULL") ? (
                             <li className="nav-item">
-                                    <a className="nav-link">
-                                        {decode.name}
-                                    </a>
+                                <a className="nav-link">
+                                    {decode.name}
+                                </a>
                             </li>
-                        ):null}
+                        ) : null}
                         {(decode.role === "ADMIN") ? (
                             <li className="nav-item">
                                 <Link to="/formAdd">
@@ -132,7 +135,7 @@ export default function NavigationBar() {
                 </div>
             </div>
 
-            <Notification />
+            <Notification/>
         </NavWrapper>
 
     );

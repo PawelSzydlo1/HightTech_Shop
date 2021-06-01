@@ -3,6 +3,8 @@ import styled from "styled-components";
 import axios from "axios";
 import {useSelector} from "react-redux";
 import {useHistory} from "react-router-dom";
+import ModalAllert from "./ModalAllert";
+import {useState} from "react";
 
 const api = axios.create({
     baseURL: `http://localhost:8080/api/product/`
@@ -19,7 +21,7 @@ export default function Product({product, detailsFunction}) {
     };
         const addToCart = () => {
             if(auth.login){
-                console.log("add to cart");
+                handleOpen();
                 api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
             }
             else{
@@ -27,8 +29,19 @@ export default function Product({product, detailsFunction}) {
                 console.log("zaloguj sie")
             }
         }
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
         return (
             <ProductWrapper  key={id} className="col-12 mx-auto col-md-4 col-lg-3 my-3">
+                <ModalAllert open={open} handleClose={handleClose} info={"Dodałeś produkt do koszyka"}/>
                 <div className="card">
                     <div
                         className="img-container p-5">

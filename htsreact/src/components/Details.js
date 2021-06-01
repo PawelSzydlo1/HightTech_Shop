@@ -1,20 +1,25 @@
 
 import {ButtonContainer} from "./Button";
-import React from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import ModalAllert from "./ModalAllert";
 
 const api = axios.create({
     baseURL: `http://localhost:8080/api/product/`
 })
 export default function Details ({details, changeStatus}) {
 
-        const {title, productImage, price, inCart,company, info }=details;
+        const {id,title, productImage, price, inCart,company, info }=details;
     const auth = useSelector(state => state.auth)
-
+    const config = {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem('token')
+        }
+    };
     const addToCart = () => {
         if(auth.login){
-            console.log("add to cart");
+            handleOpen();
             api.get("/changecart/"+id.toString()+"/"+auth.auth.first.toString(),config);
         }
         else{
@@ -23,9 +28,19 @@ export default function Details ({details, changeStatus}) {
         }
     }
 
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
         return (
             <div className="container py-5">
-
+                <ModalAllert open={open} handleClose={handleClose} info={"Dodałeś produkt do koszyka"}/>
                 <div className="row">
                     <div className="col-10 mx-auto text-center text-slanted text-blue my-5">
                         <h1>{title}</h1>
@@ -65,6 +80,7 @@ export default function Details ({details, changeStatus}) {
                             disable={inCart}
                             onClick={()=>addToCart()}
                         >
+
                             add to cart
                         </ButtonContainer>
 

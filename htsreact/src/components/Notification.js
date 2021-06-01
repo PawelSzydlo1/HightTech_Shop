@@ -11,15 +11,9 @@ export default function Notification() {
     const [noti, setNoti] = useState("")
     const [timer, setTimer] = useState(false)
     const [spamer, setSpamer]=useState([
-        "Spamer 1",
-        "Spamer 2",
-        "Spamer 3",
-        "Spamer 4",
-        "Spamer 5",
-        "Spamer 6",
-        "Spamer 7"
-
-
+        "Tylko dziś SUPER okazja! Z kodem: !WYPRZ! 10% zniżki",
+        "Przy zakupie 3 rzeczy za minimum 2000zł => Najtańsza za darmo",
+        "Przy zakupie Laptopa => pendrive GRATIS"
     ])
     const changeStatus = (stat) => {
         setStatus(stat);
@@ -30,12 +24,12 @@ export default function Notification() {
             setTimer(false);
 
         } else {
-            getNotification().then(()=>{
-                console.log(noti);
-                if(noti!==""){
-                changeStatus(true);
-                }
-            });
+            // getNotification().then(()=>{
+            //     console.log(noti);
+            //     if(noti!==""){
+            //     changeStatus(true);
+            //     }
+            // });
             setTimer(true);
 
 
@@ -65,8 +59,9 @@ export default function Notification() {
 
     useEffect(() => {
 
-        setTimeout(changeTimer,5000);
-        setTimeout(sendNotification,5000);
+        setTimeout(changeTimer,30000);
+        sendNotification();
+
 
     }, [timer]);
 
@@ -102,7 +97,7 @@ const NotificationWrapper = styled.div`
   top: 1.5em;
   right: 1.5em;
   z-index: 5;
-  background-color: navajowhite;
+  background-color: rgb(252, 241, 234);
   border-radius: 0.25em;
   padding: 0.5em;
   border: 1px solid black;
