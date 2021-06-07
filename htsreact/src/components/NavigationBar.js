@@ -39,7 +39,8 @@ export default function NavigationBar() {
         <NavWrapper>
 
 
-            <div className="navbar navbar-expand-lg">
+            <nav className="navbar navbar-expand-lg navbar-light">
+                <div className="container-fluid">
                 <Link to="/">
                     <a className="navbar-brand">
                         <img src={logo} alt="image"/>
@@ -47,17 +48,15 @@ export default function NavigationBar() {
                     </a>
                 </Link>
                 <Link to="/">
-                    <a className="navbar-brand">
-                        HighTech Shop
-                    </a>
+                    <a className="navbar-brand">HighTech Shop </a>
                 </Link>
-                <div className="navbar-toggle" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggle-icon"/>
-                </div>
-                <div className="collapse navbar-collapse " id="navbarNav">
+                <button  type="button" className="navbar-toggler " data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"/>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <div className="navbar-nav ml-auto">
+                    <ul className="navbar-nav ml-auto">
                         {(decode.name !== "NULL") ? (
                             <li className="nav-item">
                                 <a className="nav-link">
@@ -135,9 +134,10 @@ export default function NavigationBar() {
                         )}
 
 
-                    </div>
+                    </ul>
                 </div>
-            </div>
+                </div>
+            </nav>
 
             <Notification/>
 
@@ -148,7 +148,7 @@ export default function NavigationBar() {
     );
 }
 
-const NavWrapper = styled.div`
+const NavWrapper = styled.nav`
   background: var(--mainBlue);
 
   .nav-link,

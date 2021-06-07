@@ -24,12 +24,12 @@ export default function Notification() {
             setTimer(false);
 
         } else {
-            // getNotification().then(()=>{
-            //     console.log(noti);
-            //     if(noti!==""){
-            //     changeStatus(true);
-            //     }
-            // });
+            getNotification().then(()=>{
+                console.log(noti);
+                if(noti!==""){
+                changeStatus(true);
+                }
+            });
             setTimer(true);
 
 
@@ -59,7 +59,7 @@ export default function Notification() {
 
     useEffect(() => {
 
-        setTimeout(changeTimer,30000);
+        setTimeout(changeTimer,15000);
         sendNotification();
 
 
