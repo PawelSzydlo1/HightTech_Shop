@@ -4,6 +4,8 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useSelector} from "react-redux";
 import ModalAllert from "./ModalAllert";
+import styled from "styled-components";
+import {useHistory} from "react-router-dom";
 
 const api = axios.create({
     baseURL: `http://localhost:8080/api/product/`
@@ -12,6 +14,7 @@ export default function Details ({details, changeStatus}) {
 
         const {id,title, productImage, price, inCart,company, info }=details;
     const auth = useSelector(state => state.auth)
+    const history = useHistory();
     const config = {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('token')
@@ -39,6 +42,7 @@ export default function Details ({details, changeStatus}) {
     };
 
         return (
+            <DetailsWrapper>
             <div className="container py-5">
                 <ModalAllert open={open} handleClose={handleClose} info={"Dodałeś produkt do koszyka"}/>
                 <div className="row">
@@ -87,8 +91,15 @@ export default function Details ({details, changeStatus}) {
                     </div>
                 </div>
             </div>
-
+            </DetailsWrapper>
         );
 
 
 }
+
+const DetailsWrapper = styled.nav`
+img{
+  border-radius: 3em;
+  
+}
+`
